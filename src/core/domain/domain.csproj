@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="interfaces\" />
+      <ProjectReference Include="..\tools\OperationResult\OperationResult.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\tools\OperationResult\OperationResult.csproj" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     </ItemGroup>
 
 </Project>
