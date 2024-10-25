@@ -1,0 +1,12 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+.idea/
+.vs/
+*.db
+*.db-shm
+*.db-wal
+**/obj/
+The-Codex-Project-BackEndV2.sln.DotSettings.user
