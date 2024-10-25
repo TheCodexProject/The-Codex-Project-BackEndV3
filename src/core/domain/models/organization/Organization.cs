@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using domain.models.user;
+using domain.models.workspace;
 using OperationResult;
 
 namespace domain.models.organization;
@@ -35,12 +36,21 @@ public class Organization
     [Required]
     public User Owner { get; private set; }
 
+    // NOTE: EF Core requires a foreign key for the owner.
+    private Guid _ownerId;
+
     /// <summary>
     /// Members of the organization.
     /// </summary>
     public List<User> Members { get; private set; }
 
+    public List<Workspace> Workspaces { get; private set; }
+
     // # CONSTRUCTORS #
+
+    // NOTE: EF Core requires a parameterless constructor.
+    private Organization() {}
+
     private Organization(string name, User owner)
     {
         Id = Guid.NewGuid();
@@ -107,6 +117,7 @@ public class Organization
         }
 
         Members.Add(member);
+        member.JoinOrganization(this);
         return Result.Success();
     }
 
@@ -123,6 +134,39 @@ public class Organization
         }
 
         Members.Remove(member);
+        member.LeaveOrganization(this);
+        return Result.Success();
+    }
+
+    public Result AddWorkspace(Workspace workspace)
+    {
+        // ! Validate the workspace.
+        var result = OrganizationPropertyValidator.ValidateAddWorkspace(workspace, Workspaces);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        Workspaces.Add(workspace);
+        return Result.Success();
+    }
+
+    public Result RemoveWorkspace(Workspace workspace)
+    {
+        // ! Validate the workspace.
+        var result = OrganizationPropertyValidator.ValidateRemoveWorkspace(workspace, Workspaces);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        Workspaces.Remove(workspace);
         return Result.Success();
     }
 }

@@ -68,6 +68,10 @@ public class WorkItem
     public List<WorkItem> Subitems { get; private set; }
 
     // # CONSTRUCTORS #
+
+    // NOTE: EF Core requires a parameterless constructor.
+    private WorkItem() {}
+
     private WorkItem(Project project, string title)
     {
         Id = Guid.NewGuid();

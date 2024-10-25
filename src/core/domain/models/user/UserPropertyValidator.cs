@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using domain.exceptions;
+using domain.models.organization;
 using OperationResult;
 
 namespace domain.models.user;
@@ -134,5 +135,29 @@ public static class UserPropertyValidator
         var domainParts = domainPart.Split('.');
 
         return !domainParts.Any(part => part.Length > 63);
+    }
+
+    public static Result ValidateAddOrganization(Organization? organization, List<Organization> organizations)
+    {
+        // ? Is organization null or empty?
+        if (organization == null)
+            return Result.Failure(new InvalidArgumentException("The provided organization is invalid. Organization cannot be null."));
+
+        // ? Does the list already contain the organization?
+        return organizations.Contains(organization) ?
+            Result.Failure(new InvalidArgumentException("The provided organization already exists in the list."))
+            : Result.Success();
+    }
+
+    public static Result ValidateRemoveOrganization(Organization? organization, List<Organization> organizations)
+    {
+        // ? Is organization null or empty?
+        if (organization == null)
+            return Result.Failure(new InvalidArgumentException("The provided organization is invalid. Organization cannot be null."));
+
+        // ? Does the list already contain the organization?
+        return organizations.Contains(organization) ?
+            Result.Success()
+            : Result.Failure(new InvalidArgumentException("The provided organization does not exist in the list."));
     }
 }

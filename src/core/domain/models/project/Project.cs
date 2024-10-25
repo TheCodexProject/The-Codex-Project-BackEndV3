@@ -57,6 +57,10 @@ public class Project
     // TODO: Resources, Tasks etc.
 
     // # CONSTRUCTORS #
+
+    // NOTE: EF Core requires a parameterless constructor.
+    private Project() { }
+
     private Project(Workspace workspace, string title)
     {
         Id = Guid.NewGuid();

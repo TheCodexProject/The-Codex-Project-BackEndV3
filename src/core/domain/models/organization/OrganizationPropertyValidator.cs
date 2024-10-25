@@ -1,5 +1,6 @@
 ﻿using domain.exceptions;
 using domain.models.user;
+using domain.models.workspace;
 using OperationResult;
 
 namespace domain.models.organization;
@@ -65,5 +66,28 @@ public static class OrganizationPropertyValidator
             : Result.Failure(new InvalidArgumentException("The provided member does not exist in the list."));
     }
 
+    public static Result ValidateAddWorkspace(Workspace? workspace, List<Workspace> workspaces)
+    {
+        // ? Is the workspace null or empty?
+        if (workspace == null)
+            return Result.Failure(new InvalidArgumentException("The provided workspace is invalid. Workspace cannot be null."));
+
+        // ? Does the workspace already exist in the list?
+        return workspaces.Contains(workspace) ?
+            Result.Failure(new InvalidArgumentException("The provided workspace already exists in the list."))
+            : Result.Success();
+    }
+
+    public static Result ValidateRemoveWorkspace(Workspace? workspace, List<Workspace> workspaces)
+    {
+        // ? Is the workspace null or empty?
+        if (workspace == null)
+            return Result.Failure(new InvalidArgumentException("The provided workspace is invalid. Workspace cannot be null."));
+
+        // ? Does the workspace exist in the list?
+        return workspaces.Contains(workspace)
+            ? Result.Success()
+            : Result.Failure(new InvalidArgumentException("The provided workspace does not exist in the list."));
+    }
 
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.models.organization;
 using OperationResult;
 
 namespace domain.models.user;
@@ -42,7 +43,14 @@ public class User
     [MaxLength(60)]
     public string Email { get; private set; }
 
+    public List<Organization> OwnedOrganizations { get; private set; }
+    public List<Organization> Memberships { get; private set; }
+
     // # CONSTRUCTORS #
+
+    // NOTE: EF Core requires a parameterless constructor.
+    private User() { }
+
     private User(string firstName, string lastName, string email)
     {
         Id = Guid.NewGuid();
@@ -148,6 +156,44 @@ public class User
 
         // * Update the email.
         Email = email;
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result JoinOrganization(Organization organization)
+    {
+        // ? Validate the organization.
+        var result = UserPropertyValidator.ValidateAddOrganization(organization, Memberships);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        // * Add the organization.
+        Memberships.Add(organization);
+        UpdatedAt = DateTime.UtcNow;
+
+        return Result.Success();
+    }
+
+    public Result LeaveOrganization(Organization organization)
+    {
+        // ? Validate the organization.
+        var result = UserPropertyValidator.ValidateRemoveOrganization(organization, Memberships);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        // * Remove the organization.
+        Memberships.Remove(organization);
         UpdatedAt = DateTime.UtcNow;
 
         return Result.Success();

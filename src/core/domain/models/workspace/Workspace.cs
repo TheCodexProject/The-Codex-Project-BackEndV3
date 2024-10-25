@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using domain.models.organization;
+using domain.models.project;
 using domain.models.user;
 using OperationResult;
 
@@ -21,6 +22,7 @@ public class Workspace
     public string UpdatedBy { get; private set; } = string.Empty;
 
     // # PROPERTIES #
+
     [Required]
     public Organization Owner { get; private set; }
 
@@ -31,9 +33,15 @@ public class Workspace
 
     public List<User> Contacts { get; private set; }
 
+    public List<Project> Projects { get; private set; }
+
     // TODO: Projects, Resources
 
     // # CONSTRUCTORS #
+
+    // NOTE: EF Core requires a parameterless constructor.
+    private Workspace() { }
+
     private Workspace(Organization owner, string title)
     {
         Id = Guid.NewGuid();
@@ -41,6 +49,7 @@ public class Workspace
         CreatedBy = owner.Owner.Email;
 
         Owner = owner;
+        owner.AddWorkspace(this); // NOTE: This is a bidirectional relationship (Now the organization knows about the workspace.)
         Title = title;
         Contacts = [];
     }
