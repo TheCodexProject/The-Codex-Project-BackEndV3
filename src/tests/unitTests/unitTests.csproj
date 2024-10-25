@@ -21,4 +21,9 @@
         <Using Include="NUnit.Framework"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="models\" />
+      <Folder Include="tools\" />
+    </ItemGroup>
+
 </Project>
