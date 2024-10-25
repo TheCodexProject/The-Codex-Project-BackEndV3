@@ -42,9 +42,9 @@ public class Organization
     /// <summary>
     /// Members of the organization.
     /// </summary>
-    public List<User> Members { get; private set; }
+    public List<User> Members { get; private set; } = new List<User>();
 
-    public List<Workspace> Workspaces { get; private set; }
+    public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
 
     // # CONSTRUCTORS #
 

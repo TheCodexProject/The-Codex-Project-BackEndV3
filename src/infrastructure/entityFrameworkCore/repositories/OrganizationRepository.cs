@@ -8,12 +8,18 @@ public class OrganizationRepository(LocalDbContext context) : IRepository<Organi
 {
     public async Task<IEnumerable<Organization>> GetAllAsync()
     {
-        return await context.Organizations.ToListAsync();
+        return await context.Organizations
+            .Include(organization => organization.Owner)
+            .Include(organization => organization.Members)
+            .ToListAsync();
     }
 
     public async Task<Organization?> GetByIdAsync(Guid id)
     {
-        return await context.Organizations.FirstOrDefaultAsync(organization => organization.Id == id);
+        return await context.Organizations
+            .Include(organization => organization.Owner)
+            .Include(organization => organization.Members)
+            .FirstOrDefaultAsync(organization => organization.Id == id);
     }
 
     public async Task AddAsync(Organization toAdd)

@@ -15,9 +15,4 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="appEntry\commands\organization\" />
-      <Folder Include="features\organization\" />
-    </ItemGroup>
-
 </Project>

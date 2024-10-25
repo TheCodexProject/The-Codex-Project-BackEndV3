@@ -43,8 +43,8 @@ public class User
     [MaxLength(60)]
     public string Email { get; private set; }
 
-    public List<Organization> OwnedOrganizations { get; private set; }
-    public List<Organization> Memberships { get; private set; }
+    public List<Organization> OwnedOrganizations { get; private set; } = new List<Organization>();
+    public List<Organization> Memberships { get; private set; } = new List<Organization>();
 
     // # CONSTRUCTORS #
 

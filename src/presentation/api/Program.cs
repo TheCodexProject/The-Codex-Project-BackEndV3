@@ -15,7 +15,11 @@ builder.Services.AddSwaggerGen();
 // # --------------------- #
 
 // Registers all of our controllers.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.MaxDepth = 10; // Adjust the depth limit as needed
+    });
 
 // # --------------------- #
 // #    COMMAND HANDLERS   #
