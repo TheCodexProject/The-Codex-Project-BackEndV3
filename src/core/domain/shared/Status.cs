@@ -5,10 +5,10 @@
 /// </summary>
 public enum Status
 {
-    None,
-    Open,
-    InProgress,
-    ReadyForReview,
-    Done,
-    Closed
+    None = 0,
+    Open = 1,
+    InProgress = 2,
+    ReadyForReview = 3,
+    Done = 4,
+    Closed = 5
 }
