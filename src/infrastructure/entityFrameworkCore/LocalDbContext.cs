@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace entityFrameworkCore;
 
-public class LocalDbContext : DbContext
+public class LocalDbContext(DbContextOptions<LocalDbContext> options) : DbContext(options)
 {
     // # TABLES #
     public DbSet<User> Users { get; init; }
