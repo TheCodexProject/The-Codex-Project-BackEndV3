@@ -31,9 +31,9 @@ public class Workspace
     [MinLength(3)]
     public string Title { get; private set; }
 
-    public List<User> Contacts { get; private set; }
+    public List<User> Contacts { get; private set; } = new List<User>();
 
-    public List<Project> Projects { get; private set; }
+    public List<Project> Projects { get; private set; } = new List<Project>();
 
     // TODO: Projects, Resources
 
@@ -115,6 +115,32 @@ public class Workspace
             return Result.Failure(result.Errors.ToArray());
 
         Contacts.Remove(contact);
+        return Result.Success();
+    }
+
+    public Result AddProject(Project project)
+    {
+        // ? Validate the input.
+        var result = WorkspacePropertyValidator.ValidateAddProject(project, Projects);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Projects.Add(project);
+        return Result.Success();
+    }
+
+    public Result RemoveProject(Project project)
+    {
+        // ? Validate the input.
+        var result = WorkspacePropertyValidator.ValidateRemoveProject(project, Projects);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Projects.Remove(project);
         return Result.Success();
     }
 

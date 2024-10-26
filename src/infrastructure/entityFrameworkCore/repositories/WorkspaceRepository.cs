@@ -8,12 +8,20 @@ public class WorkspaceRepository(LocalDbContext context) : IRepository<Workspace
 {
     public async Task<IEnumerable<Workspace>> GetAllAsync()
     {
-        return await context.Workspaces.ToListAsync();
+        return await context.Workspaces
+            .Include(workspace => workspace.Contacts)
+            .Include(workspace => workspace.Projects)
+            .Include(workspace => workspace.Owner)
+            .ToListAsync();
     }
 
     public async Task<Workspace?> GetByIdAsync(Guid id)
     {
-        return await context.Workspaces.FirstOrDefaultAsync(workspace => workspace.Id == id);
+        return await context.Workspaces
+            .Include(workspace => workspace.Contacts)
+            .Include(workspace => workspace.Projects)
+            .Include(workspace => workspace.Owner)
+            .FirstOrDefaultAsync(workspace => workspace.Id == id);
     }
 
     public async Task AddAsync(Workspace toAdd)

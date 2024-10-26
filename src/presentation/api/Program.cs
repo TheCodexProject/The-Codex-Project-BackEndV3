@@ -18,7 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.MaxDepth = 10; // Adjust the depth limit as needed
+        options.JsonSerializerOptions.MaxDepth = 64; // Adjust the depth limit as needed
     });
 
 // # --------------------- #

@@ -1,4 +1,5 @@
 ﻿using domain.exceptions;
+using domain.models.project;
 using domain.models.user;
 using OperationResult;
 
@@ -64,6 +65,30 @@ public static class WorkspacePropertyValidator
         return contacts.Contains(contact) ?
             Result.Success()
             : Result.Failure(new InvalidArgumentException("The provided contact does not exist in the list."));
+    }
+
+    public static Result ValidateAddProject(Project? project, List<Project> projects)
+    {
+        // ? Is the project null or empty?
+        if (project == null)
+            return Result.Failure(new InvalidArgumentException("The provided project is invalid. Project cannot be null."));
+
+        // ? Does the project already exist in the list?
+        return projects.Contains(project) ?
+            Result.Failure(new InvalidArgumentException("The provided project already exists in the list."))
+            : Result.Success();
+    }
+
+    public static Result ValidateRemoveProject(Project? project, List<Project> projects)
+    {
+        // ? Is the project null or empty?
+        if (project == null)
+            return Result.Failure(new InvalidArgumentException("The provided project is invalid. Project cannot be null."));
+
+        // ? Does the project exist in the list?
+        return projects.Contains(project) ?
+            Result.Success()
+            : Result.Failure(new InvalidArgumentException("The provided project does not exist in the list."));
     }
 
     // TODO: TO BE EXTENDED
