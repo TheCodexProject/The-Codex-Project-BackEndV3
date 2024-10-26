@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.organization.models;
 using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using domain.models.organization;
@@ -29,28 +30,24 @@ public class UpdateOrganizationEndpoint(ICommandDispatcher dispatcher) : Endpoin
 
     public record UpdateOrganizationRequest(string? Name, List<string>? MembersToAdd, List<string>? MembersToRemove);
 
-    private OrganizationDTO Transform(UpdateOrganizationCommand cmd)
+    private DTOs.OrganizationDTO Transform(UpdateOrganizationCommand cmd)
     {
         if (cmd.Organization is null)
         {
-            return new OrganizationDTO("","", new UserDTO("", "", ""), new List<UserDTO>());
+            return new DTOs.OrganizationDTO("","", new DTOs.UserDTO("", "", ""), new List<DTOs.UserDTO>());
         }
 
         // Handle the possibility of null Owner or Members
         var owner = cmd.Organization.Owner != null
-            ? new UserDTO(cmd.Organization.Owner.Id.ToString(), $"{cmd.Organization.Owner.FirstName} {cmd.Organization.Owner.LastName}", cmd.Organization.Owner.Email)
-            : new UserDTO("", "", "");
+            ? new DTOs.UserDTO(cmd.Organization.Owner.Id.ToString(), $"{cmd.Organization.Owner.FirstName} {cmd.Organization.Owner.LastName}", cmd.Organization.Owner.Email)
+            : new DTOs.UserDTO("", "", "");
 
         var members = cmd.Organization.Members != null
-            ? cmd.Organization.Members.Select(x => new UserDTO(x.Id.ToString(), $"{x.FirstName} {x.LastName}", x.Email)).ToList()
-            : new List<UserDTO>();
+            ? cmd.Organization.Members.Select(x => new DTOs.UserDTO(x.Id.ToString(), $"{x.FirstName} {x.LastName}", x.Email)).ToList()
+            : new List<DTOs.UserDTO>();
 
-        var dto = new OrganizationDTO(cmd.Organization.Id.ToString(),cmd.Organization.Name, owner, members);
+        var dto = new DTOs.OrganizationDTO(cmd.Organization.Id.ToString(),cmd.Organization.Name, owner, members);
 
         return dto;
     }
-
-    private record OrganizationDTO(string Id,string Name, UserDTO Owner, List<UserDTO> Members);
-
-    private record UserDTO(string Id, string Name, string Email);
 }

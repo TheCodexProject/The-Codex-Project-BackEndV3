@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.organization.models;
 using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using domain.models.organization;
@@ -30,37 +31,35 @@ public class GetAllOrganizationsEndpoint(ICommandDispatcher dispatcher) : Endpoi
             : Ok(new GetAllOrganizationsResponse(dtos)); // * Return the organizations
     }
 
-    private List<OrganizationDTO> Transform(GetAllOrganizationsCommand cmd)
+    private List<DTOs.OrganizationDTO> Transform(GetAllOrganizationsCommand cmd)
     {
         if (cmd == null || cmd.Organizations == null || !cmd.Organizations.Any())
         {
-            return new List<OrganizationDTO>();
+            return new List<DTOs.OrganizationDTO>();
         }
 
         return cmd.Organizations.Select(organization =>
         {
             if (organization == null)
             {
-                return new OrganizationDTO("", new UserDTO("", "", ""), new List<UserDTO>());
+                return new DTOs.OrganizationDTO("","", new DTOs.UserDTO("", "", ""), new List<DTOs.UserDTO>());
             }
 
             var owner = organization.Owner != null
-                ? new UserDTO(organization.Owner.Id.ToString(), $"{organization.Owner.FirstName} {organization.Owner.LastName}", organization.Owner.Email)
-                : new UserDTO("", "", "");
+                ? new DTOs.UserDTO(organization.Owner.Id.ToString(), $"{organization.Owner.FirstName} {organization.Owner.LastName}", organization.Owner.Email)
+                : new DTOs.UserDTO("", "", "");
 
             var members = organization.Members != null
-                ? organization.Members.Select(x => new UserDTO(x.Id.ToString(), $"{x.FirstName} {x.LastName}", x.Email)).ToList()
-                : new List<UserDTO>();
+                ? organization.Members.Select(x => new DTOs.UserDTO(x.Id.ToString(), $"{x.FirstName} {x.LastName}", x.Email)).ToList()
+                : new List<DTOs.UserDTO>();
 
-            return new OrganizationDTO(organization.Name, owner, members);
+            return new DTOs.OrganizationDTO(organization.Id.ToString(),organization.Name, owner, members);
         }).ToList();
     }
 
-    private record OrganizationDTO(string Name, UserDTO Owner, List<UserDTO> Members);
 
-    private record UserDTO(string Id, string Name, string Email);
 
-    private record GetAllOrganizationsResponse(IEnumerable<OrganizationDTO> Organizations);
+    private record GetAllOrganizationsResponse(IEnumerable<DTOs.OrganizationDTO> Organizations);
 
 
 }
