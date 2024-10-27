@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.models.workItem;
 using domain.models.workspace;
 using domain.shared;
 using OperationResult;
@@ -52,7 +53,7 @@ public class Project
     /// </summary>
     public DateTime End { get; private set; } = DateTime.MinValue;
 
-
+    public List<WorkItem> Tasks { get; private set; } = new List<WorkItem>();
 
     // TODO: Resources, Tasks etc.
 
@@ -68,6 +69,7 @@ public class Project
         CreatedBy = workspace.Owner.Owner.Email;
 
         Workspace = workspace;
+        workspace.AddProject(this);
         Title = title;
     }
 
@@ -159,6 +161,32 @@ public class Project
 
         Start = start;
         End = end;
+        return Result.Success();
+    }
+
+    public Result AddTask(WorkItem task)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateAddWorkItem(task, Tasks);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Tasks.Add(task);
+        return Result.Success();
+    }
+
+    public Result RemoveTask(WorkItem task)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateRemoveWorkItem(task, Tasks);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Tasks.Remove(task);
         return Result.Success();
     }
 

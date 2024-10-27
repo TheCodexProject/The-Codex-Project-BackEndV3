@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace entityFrameworkCore;
 
-public class LocalDbContext(DbContextOptions<LocalDbContext> options) : DbContext(options)
+public class LocalDbContext: DbContext
 {
     // # TABLES #
     public DbSet<User> Users { get; init; }
@@ -16,6 +16,10 @@ public class LocalDbContext(DbContextOptions<LocalDbContext> options) : DbContex
     public DbSet<Workspace> Workspaces { get; init; }
     public DbSet<Project> Projects { get; init; }
     public DbSet<WorkItem> WorkItems { get; init; }
+
+    // # CONSTRUCTORS #
+    public LocalDbContext(DbContextOptions<LocalDbContext> options) : base(options) { }
+
 
     // # CONFIGURATION #
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

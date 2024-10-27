@@ -1,9 +1,11 @@
 using application.appEntry.commands.organization;
+using application.appEntry.commands.project;
 using application.appEntry.commands.user;
 using application.appEntry.commands.workspace;
 using application.appEntry.dispatcher;
 using application.appEntry.interfaces;
 using application.features.organization;
+using application.features.project;
 using application.features.user;
 using application.features.workspace;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,15 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllWorkspacesCommand>, GetAllWorkspacesHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkspaceCommand>,UpdateWorkspaceHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkspaceCommand>, DeleteWorkspaceHandler>();
+
+        // * ---------------- *
+        // * Project Handlers *
+        // * ---------------- *
+        services.AddScoped<ICommandHandler<CreateProjectCommand>,CreateProjectHandler>();
+        services.AddScoped<ICommandHandler<GetProjectCommand>, GetProjectHandler>();
+        services.AddScoped<ICommandHandler<GetAllProjectsCommand>, GetAllProjectsHandler>();
+        services.AddScoped<ICommandHandler<UpdateProjectCommand>,UpdateProjectHandler>();
+        services.AddScoped<ICommandHandler<DeleteProjectCommand>, DeleteProjectHandler>();
 
     }
 
