@@ -53,7 +53,7 @@ public class WorkItem
     /// <summary>
     /// Type of the work item. (Default: Task)
     /// </summary>
-    public ItemType Type { get; private set; } = ItemType.Task;
+    public ItemType Type { get; private set; } = ItemType.None;
 
     /// <summary>
     /// The user that the work item is assigned to. (Default: None)
@@ -65,7 +65,7 @@ public class WorkItem
     /// <summary>
     /// Subitems that are part of the work item.
     /// </summary>
-    public List<WorkItem> Subitems { get; private set; }
+    public List<WorkItem> Subitems { get; private set; } = new List<WorkItem>();
 
     // # CONSTRUCTORS #
 

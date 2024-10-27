@@ -2,8 +2,9 @@
 
 public enum ItemType
 {
-   Task,
-   Bug,
-   UserStory,
-   Epic
+   None = 0,
+   Task = 1,
+   Bug = 2,
+   UserStory = 3,
+   Epic = 4
 }

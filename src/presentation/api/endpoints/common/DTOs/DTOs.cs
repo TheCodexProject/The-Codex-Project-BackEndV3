@@ -9,4 +9,6 @@ public class DTOs
     public record WorkspaceDTO(string Id, string Title, string OwnedBy, List<DTOs.UserDTO> Contacts, List<string> Projects);
 
     public record ProjectDTO(string Id, string Title, string Description, string Status, string Priority, string[] TimeRange, string ContainedIn);
+
+    public record WorkItemDTO(string Id,string ContainedIn, string Title, string Description, string Status, string Priority, string Type, string AssignedTo);
 }

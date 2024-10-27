@@ -1,5 +1,6 @@
 ﻿using domain.exceptions;
 using domain.models.user;
+using domain.models.workItem.values;
 using domain.shared;
 using OperationResult;
 
@@ -42,6 +43,11 @@ public static class WorkItemPropertyValidator
     public static Result<Priority> ValidatePriority(Priority priority)
     {
         return priority == Priority.None ? Result<Priority>.Failure(new InvalidArgumentException("Work item priority cannot be empty, please provide a priority.")) : Result<Priority>.Success(priority);
+    }
+
+    public static Result<ItemType> ValidateType(ItemType type)
+    {
+        return type == ItemType.None ? Result<ItemType>.Failure(new InvalidArgumentException("Work item type cannot be empty, please provide a type.")) : Result<ItemType>.Success(type);
     }
 
     public static Result<User> ValidateAssignedTo(User? assignedTo)

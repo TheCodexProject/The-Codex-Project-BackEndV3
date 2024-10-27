@@ -8,12 +8,18 @@ public class WorkItemRepository(LocalDbContext context) : IRepository<WorkItem>
 {
     public async Task<IEnumerable<WorkItem>> GetAllAsync()
     {
-        return await context.WorkItems.ToListAsync();
+        return await context.WorkItems
+            .Include(workitem => workitem.Project)
+            .Include(workitem => workitem.AssignedTo)
+            .ToListAsync();
     }
 
     public async Task<WorkItem?> GetByIdAsync(Guid id)
     {
-        return await context.WorkItems.FirstOrDefaultAsync(workItem => workItem.Id == id);
+        return await context.WorkItems
+            .Include(workitem => workitem.Project)
+            .Include(workitem => workitem.AssignedTo)
+            .FirstOrDefaultAsync(workItem => workItem.Id == id);
     }
 
     public async Task AddAsync(WorkItem toAdd)
