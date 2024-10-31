@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
 using OperationResult;
@@ -45,7 +47,9 @@ public class Organization
     public List<User> Members { get; private set; } = new List<User>();
 
     public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
-
+    
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
+    
     // # CONSTRUCTORS #
 
     // NOTE: EF Core requires a parameterless constructor.
@@ -167,6 +171,49 @@ public class Organization
         }
 
         Workspaces.Remove(workspace);
+        return Result.Success();
+    }
+
+    public Result AddResource(string title, string url)
+    {
+        // * Try to create a new resource.
+        var resourceResult = Resource.Create(title, url,Id, ResourceLevel.Organization);
+        
+        // ? Is the resource a failure?
+        if (resourceResult.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(resourceResult.Errors.ToArray());
+        }
+        
+        // * Add the resource to the organization.
+        var addValidationResult = OrganizationPropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
+        
+        // ? Is the add validation a failure?
+        if (addValidationResult.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        }
+        
+        Resources.Add(resourceResult.Value);
+
+        return Result.Success();
+    }
+    
+    public Result RemoveResource(Resource resource)
+    {
+        // ! Validate the resource.
+        var result = OrganizationPropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        Resources.Remove(resource);
         return Result.Success();
     }
 }

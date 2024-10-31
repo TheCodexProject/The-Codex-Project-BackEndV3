@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.workItem;
 using domain.models.workspace;
 using domain.shared;
@@ -55,7 +57,7 @@ public class Project
 
     public List<WorkItem> Tasks { get; private set; } = new List<WorkItem>();
 
-    // TODO: Resources, Tasks etc.
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
 
     // # CONSTRUCTORS #
 
@@ -190,5 +192,24 @@ public class Project
         return Result.Success();
     }
 
-    // TODO: Resources, Tasks etc.
+    public Result AddResource(string title, string url)
+    {
+        // * Try to create a new resource.
+        var resourceResult = Resource.Create(title, url, Id, ResourceLevel.Project);
+        
+        // ? Is the resource creation a failure?
+        if (resourceResult.IsFailure)
+            return Result.Failure(resourceResult.Errors.ToArray());
+        
+        // * Add the resource to the project.
+        var addValidationResult = ProjectPropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
+        
+        // ? Is the validation a failure?
+        if (addValidationResult.IsFailure)
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        
+        Resources.Add(resourceResult.Value);
+        
+        return Result.Success();
+    }
 }

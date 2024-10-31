@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using domain.models.project;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem.values;
 using domain.shared;
@@ -66,6 +67,8 @@ public class WorkItem
     /// Subitems that are part of the work item.
     /// </summary>
     public List<WorkItem> Subitems { get; private set; } = new List<WorkItem>();
+    
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
 
     // # CONSTRUCTORS #
 
@@ -218,5 +221,29 @@ public class WorkItem
         return Result.Success();
     }
 
-    // TODO: TO BE EXTENDED
+    public Result AddResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = WorkItemPropertyValidator.ValidateAddResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Add(resource);
+        return Result.Success();
+    }
+    
+    public Result RemoveResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = WorkItemPropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Remove(resource);
+        return Result.Success();
+    }
 }

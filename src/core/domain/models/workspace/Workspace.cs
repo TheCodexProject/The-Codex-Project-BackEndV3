@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using domain.models.organization;
 using domain.models.project;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.user;
 using OperationResult;
 
@@ -35,7 +37,7 @@ public class Workspace
 
     public List<Project> Projects { get; private set; } = new List<Project>();
 
-    // TODO: Projects, Resources
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
 
     // # CONSTRUCTORS #
 
@@ -144,4 +146,41 @@ public class Workspace
         return Result.Success();
     }
 
+    public Result AddResource(string title, string url)
+    {
+        // * Try to create a new resource.
+        var resourceResult = Resource.Create(title, url, Id, ResourceLevel.Workspace);
+        
+        // ? Is the resource a failure?
+        if (resourceResult.IsFailure)
+        {
+            return Result.Failure(resourceResult.Errors.ToArray());
+        }
+        
+        // * Add the resource to the workspace.
+        var addValidationResult = WorkspacePropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
+        
+        // ? Is the add validation a failure?
+        if (addValidationResult.IsFailure)
+        {
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        }
+        
+        Resources.Add(resourceResult.Value);
+        
+        return Result.Success();
+    }
+    
+    public Result RemoveResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = WorkspacePropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Remove(resource);
+        return Result.Success();
+    }
 }

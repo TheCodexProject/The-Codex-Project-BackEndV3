@@ -32,12 +32,18 @@ public class Resource
 
     public ResourceLevel Level { get; private set; } = ResourceLevel.None;
 
+    /// <summary>
+    /// The ID of the "Owner" of this resource. This is based on the Resource's Level.
+    /// It can either be a Organization ID, Workspace ID or Project ID.
+    /// </summary>
+    public Guid OwnerId { get; private set; }
+    
     // # CONSTRUCTORS #
 
     // NOTE: EF Core constructor
     private Resource() { }
 
-    private Resource(string title, string url)
+    private Resource(string title, string url, Guid ownerId, ResourceLevel level)
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
@@ -45,12 +51,14 @@ public class Resource
 
         Title = title;
         Url = url;
+        OwnerId = ownerId;
+        Level = level;
     }
 
-    public static Result<Resource> Create(string title, string url)
+    public static Result<Resource> Create(string title, string url, Guid ownerId, ResourceLevel level)
     {
         // ! Validate the resource's input here.
-        var validationResult = Validate(title, url);
+        var validationResult = Validate(title, url, level);
 
         // ? Is the validation a failure?
         if (validationResult.IsFailure)
@@ -58,10 +66,10 @@ public class Resource
             return Result<Resource>.Failure(validationResult.Errors.ToArray());
         }
 
-        return Result<Resource>.Success(new Resource(title, url));
+        return Result<Resource>.Success(new Resource(title, url, ownerId, level));
     }
 
-    private static Result Validate(string title, string url)
+    private static Result Validate(string title, string url, ResourceLevel level)
     {
         // * List for errors encountered during validation.
         List<Exception> errors = [];
@@ -82,6 +90,15 @@ public class Resource
         if (urlValidation.IsFailure)
         {
             errors.AddRange(urlValidation.Errors);
+        }
+        
+        // ! Validate the level
+        var levelValidation = ResourcePropertyValidator.ValidateLevel(level);
+        
+        // ? Is the level validation a failure?
+        if (levelValidation.IsFailure)
+        {
+            errors.AddRange(levelValidation.Errors);
         }
 
         return errors.Count != 0

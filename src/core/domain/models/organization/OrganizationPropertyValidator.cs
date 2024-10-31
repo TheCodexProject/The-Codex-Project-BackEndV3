@@ -1,4 +1,5 @@
 ﻿using domain.exceptions;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workspace;
 using OperationResult;
@@ -88,6 +89,30 @@ public static class OrganizationPropertyValidator
         return workspaces.Contains(workspace)
             ? Result.Success()
             : Result.Failure(new InvalidArgumentException("The provided workspace does not exist in the list."));
+    }
+
+    public static Result ValidateAddResource(Resource? resource, List<Resource> resources)
+    {
+        // ? Is the resource null or empty?
+        if (resource == null)
+            return Result.Failure(new InvalidArgumentException("The provided resource is invalid. Resource cannot be null."));
+
+        // ? Does the resource already exist in the list?
+        return resources.Contains(resource) ?
+            Result.Failure(new InvalidArgumentException("The provided resource already exists in the list."))
+            : Result.Success();
+    }
+    
+    public static Result ValidateRemoveResource(Resource? resource, List<Resource> resources)
+    {
+        // ? Is the resource null or empty?
+        if (resource == null)
+            return Result.Failure(new InvalidArgumentException("The provided resource is invalid. Resource cannot be null."));
+
+        // ? Does the resource exist in the list?
+        return resources.Contains(resource)
+            ? Result.Success()
+            : Result.Failure(new InvalidArgumentException("The provided resource does not exist in the list."));
     }
 
 }
