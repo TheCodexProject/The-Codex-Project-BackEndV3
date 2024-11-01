@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.interfaces;
 using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.user;
@@ -10,7 +11,7 @@ namespace domain.models.organization;
 /// <summary>
 /// Represents an organization.
 /// </summary>
-public class Organization
+public class Organization : IResourceOwner
 {
     // # METADATA #
     [Key]

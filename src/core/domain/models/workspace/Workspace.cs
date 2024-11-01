@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.interfaces;
 using domain.models.organization;
 using domain.models.project;
 using domain.models.resource;
@@ -11,7 +12,7 @@ namespace domain.models.workspace;
 /// <summary>
 /// Represents a workspace.
 /// </summary>
-public class Workspace
+public class Workspace : IResourceOwner
 {
     // # METADATA #
     [Key]

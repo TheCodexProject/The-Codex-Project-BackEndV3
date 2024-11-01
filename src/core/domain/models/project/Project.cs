@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.interfaces;
 using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.workItem;
@@ -8,7 +9,7 @@ using OperationResult;
 
 namespace domain.models.project;
 
-public class Project
+public class Project : IResourceOwner
 {
     // # METADATA #
     [Key]
@@ -210,6 +211,19 @@ public class Project
         
         Resources.Add(resourceResult.Value);
         
+        return Result.Success();
+    }
+
+    public Result RemoveResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Remove(resource);
         return Result.Success();
     }
 }
