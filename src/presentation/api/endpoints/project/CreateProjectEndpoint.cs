@@ -2,12 +2,15 @@
 using application.appEntry.commands.project;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.project;
 
+[ApiExplorerSettings(GroupName = "Projects")]
 public class CreateProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPost("/projects")]
+    [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
     {
         // * Create the request

@@ -3,12 +3,15 @@ using api.endpoints.organization.models;
 using application.appEntry.commands.project;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.project;
 
+[ApiExplorerSettings(GroupName = "Projects")]
 public class GetProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("/projects/{id}")]
+    [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> GetProject([FromRoute] string id)
     {
         // * Create the request

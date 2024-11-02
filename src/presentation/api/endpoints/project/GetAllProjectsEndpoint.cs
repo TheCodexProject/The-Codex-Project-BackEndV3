@@ -5,12 +5,15 @@ using application.appEntry.commands.project;
 using application.appEntry.interfaces;
 using domain.models.project;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.project;
 
+[ApiExplorerSettings(GroupName = "Projects")]
 public class GetAllProjectsEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("/projects")]
+    [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> GetAllProjects()
     {
         // * Create the request
