@@ -18,8 +18,4 @@
       <ProjectReference Include="..\..\infrastructure\entityFrameworkCore\entityFrameworkCore.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="endpoints\project\resource\" />
-    </ItemGroup>
-
 </Project>
