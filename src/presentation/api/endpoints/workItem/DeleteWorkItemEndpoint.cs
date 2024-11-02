@@ -2,12 +2,15 @@
 using application.appEntry.commands.workItem;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workItem;
 
+[ApiExplorerSettings(GroupName = "WorkItems")]
 public class DeleteWorkItemEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
     [HttpDelete("/workItems/{id}")]
+    [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string id)
     {
         // * Create the command

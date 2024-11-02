@@ -3,12 +3,15 @@ using api.endpoints.organization.models;
 using application.appEntry.commands.workItem;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workItem;
 
+[ApiExplorerSettings(GroupName = "WorkItems")]
 public class GetWorkItemEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("/workItems/{id}")]
+    [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> GetWorkItem([FromRoute] string id)
     {
         // * Create the request
