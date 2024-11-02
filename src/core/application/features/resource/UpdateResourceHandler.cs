@@ -23,7 +23,7 @@ public class UpdateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Upd
             return Result.Failure(owner.Errors.ToArray());
 
         // * Get the resource from the owner
-        var resource = owner.Value.Resources.FirstOrDefault(r => r.Id == command.Resource.Id);
+        var resource = owner.Value.Resources.FirstOrDefault(r => r.Id == command.Id);
 
         // ? Was the resource found?
         if(resource is null)
@@ -31,13 +31,13 @@ public class UpdateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Upd
             return Result.Failure(new NotFoundException("The resource could not be found."));
 
         // * Update the resource
-        if (IsChanged(resource.Title, command.Resource.Title))
+        if (IsChanged(resource.Title, command.Title))
             resource.UpdateTitle(command.Title);
 
-        if (IsChanged(resource.Description, command.Resource.Description))
+        if (IsChanged(resource.Description, command.Description))
             resource.UpdateDescription(command.Description);
 
-        if (IsChanged(resource.Url, command.Resource.Url))
+        if (IsChanged(resource.Url, command.Url))
             resource.UpdateUrl(command.Url);
 
         if (command.Type.HasValue && (command.Type != resource.Type || command.Type != ResourceType.None))

@@ -10,12 +10,12 @@ namespace api.endpoints.organization.resource;
 [ApiExplorerSettings(GroupName = "Organizations")]
 public class CreateOrganizationResourceEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
-    [HttpPost("organization/{id}/resources")]
+    [HttpPost("organization/{organizationId}/resources")]
     [SwaggerOperation(Tags = new[] { "Organization - Resources" })]
-    public async Task<IActionResult> HandleAsync([FromRoute] string id, [FromBody] CreateResourceRequest request)
+    public async Task<IActionResult> HandleAsync([FromRoute] string organizationId, [FromBody] CreateResourceRequest request)
     {
         // * Create the request
-        var cmd = CreateResourceCommand.Create(request.title, request.url, id, ResourceLevel.Organization);
+        var cmd = CreateResourceCommand.Create(request.title, request.url, organizationId, ResourceLevel.Organization);
 
         // ? Were there any validation errors?
         if (cmd.IsFailure)

@@ -46,6 +46,9 @@ public class DeleteResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Del
             // ! Return the error
             return Result.Failure(updateResult.Errors.ToArray());
 
+        // ! Remove the resource from the database
+        unitOfWork.Resources.Remove(resource);
+
         // ? Did the save fail?
         if (await unitOfWork.SaveChangesAsync() == 0)
             // ! Return the error

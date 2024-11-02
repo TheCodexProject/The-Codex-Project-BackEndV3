@@ -16,26 +16,31 @@ public class GetResourceCommand
     public Resource? Resource { get; set; } = null;
 
 
-    private GetResourceCommand(Guid id)
+    private GetResourceCommand(Guid id, Guid ownerId, ResourceLevel level)
     {
         Id = id;
+        OwnerId = ownerId;
+        Level = level;
     }
 
-    public static Result<GetResourceCommand> Create(string id)
+    public static Result<GetResourceCommand> Create(string id, string ownerId, ResourceLevel level)
     {
-        var validationResult = Validate(id);
+        var validationResult = Validate(id, ownerId);
 
         if (validationResult.IsFailure)
             return Result<GetResourceCommand>.Failure(validationResult.Errors.ToArray());
 
-        return new GetResourceCommand(validationResult);
+        return new GetResourceCommand(Guid.Parse(id), Guid.Parse(ownerId), level);
     }
 
-    private static Result<Guid> Validate(string id)
+    private static Result Validate(string id, string ownerId)
     {
         if (!Guid.TryParse(id, out var parsedId))
-            return Result<Guid>.Failure(new FailedOperationException("The given ID could not be parsed into a GUID"));
+            return Result.Failure(new FailedOperationException("The given ID could not be parsed into a GUID"));
 
-        return Result<Guid>.Success(parsedId);
+        if (!Guid.TryParse(ownerId, out var parsedOwnerId))
+            return Result.Failure(new FailedOperationException("The given owner ID could not be parsed into a GUID"));
+
+        return Result.Success();
     }
 }

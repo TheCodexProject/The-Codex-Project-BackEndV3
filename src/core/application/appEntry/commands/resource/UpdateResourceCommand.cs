@@ -19,19 +19,21 @@ public class UpdateResourceCommand
     public string? Description { get; set; }
     public ResourceType? Type { get; set; }
 
-    private UpdateResourceCommand(Guid id, string title, string url, string description, ResourceType? type)
+    private UpdateResourceCommand(Guid id, Guid ownerId, ResourceLevel level,string? title, string? url, string? description, ResourceType? type)
     {
         Id = id;
+        OwnerId = ownerId;
+        Level = level;
         Title = title;
         Url = url;
         Description = description;
         Type = type;
     }
 
-    public static Result<UpdateResourceCommand> Create(string id, string? title, string? url, string? description, string? type)
+    public static Result<UpdateResourceCommand> Create(string id, string ownerId, ResourceLevel level, string? title, string? url, string? description, string? type)
     {
         // ! Validate the input
-        var validationResult = Validate(id, title, url, description, type);
+        var validationResult = Validate(id, ownerId, title, url, description, type);
 
         // ? Were there any validation errors?
         if (validationResult.IsFailure)
@@ -44,17 +46,21 @@ public class UpdateResourceCommand
         }
 
         // * Return the newly created command
-        return new UpdateResourceCommand(new Guid(id), title, url, description, typeEnum);
+        return new UpdateResourceCommand(new Guid(id),new Guid(ownerId),level, title, url, description, typeEnum);
     }
 
-    private static Result Validate(string id, string? title, string? url, string? description, string? type)
+    private static Result Validate(string id, string ownerId, string? title, string? url, string? description, string? type)
     {
         // * List for exceptions during validation
         List<Exception> exceptions = [];
 
         // ! Validate the ID
-        if (!Guid.TryParse(id, out var parsedId))
+        if (!Guid.TryParse(id, out var _))
             return Result.Failure(new FailedOperationException("The given ID could not be parsed into a GUID"));
+
+        // ! Validate the ID
+        if (!Guid.TryParse(ownerId, out var _))
+            return Result.Failure(new FailedOperationException("The given Owner ID could not be parsed into a GUID"));
 
         // ! Validate the Title
         if (title is not null)

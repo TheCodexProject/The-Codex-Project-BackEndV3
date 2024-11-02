@@ -45,6 +45,6 @@ public class GetAllOrganizationResourcesEndpoint(ICommandDispatcher dispatcher) 
     private DTOs.ResourceDTO TransformSingle(Resource resource)
     {
         // * Create the DTO
-        return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Level.ToString());
+        return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
     }
 }
