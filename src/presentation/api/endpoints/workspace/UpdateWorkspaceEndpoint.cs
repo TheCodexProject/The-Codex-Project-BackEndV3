@@ -4,12 +4,15 @@ using application.appEntry.commands.workspace;
 using application.appEntry.interfaces;
 using domain.models.project;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workspace;
 
+[ApiExplorerSettings(GroupName = "Workspaces")]
 public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPut("/workspaces/{id}")]
+    [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> UpdateWorkspace([FromRoute] string id, [FromBody] UpdateWorkspaceRequest request)
     {
         // * Create the request

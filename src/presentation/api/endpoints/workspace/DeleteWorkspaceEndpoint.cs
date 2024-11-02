@@ -2,12 +2,15 @@
 using application.appEntry.commands.workspace;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workspace;
 
+[ApiExplorerSettings(GroupName = "Workspaces")]
 public class DeleteWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpDelete("/workspaces/{id}")]
+    [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> DeleteWorkspace([FromRoute] string id)
     {
         // * Create the request
