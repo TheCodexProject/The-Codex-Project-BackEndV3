@@ -4,12 +4,15 @@ using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using domain.models.organization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.organization;
 
+[ApiExplorerSettings(GroupName = "Organizations")]
 public class GetAllOrganizationsEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("organizations")]
+    [SwaggerOperation(Tags = new[] { "Organization" })]
     public async Task<IActionResult> GetAllOrganizations()
     {
         // * Create the request
