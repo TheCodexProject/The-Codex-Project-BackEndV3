@@ -6,17 +6,17 @@ using domain.models.resource.values;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace api.endpoints.organization.resource;
+namespace api.endpoints.workspace.resource;
 
-[ApiExplorerSettings(GroupName = "Organizations")]
-public class UpdateOrganizationResourceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
+[ApiExplorerSettings(GroupName = "Workspaces")]
+public class UpdateWorkspaceResourceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("organization/{organizationId}/resource/{resourceId}")]
-    [SwaggerOperation(Tags = new[] { "Organization - Resources" })]
-    public async Task<IActionResult> UpdateOrganizationResource(string organizationId, string resourceId, [FromBody] UpdateOrganizationResourceRequest request)
+    [HttpPut("workspace/{workspaceId}/resources/{resourceId}")]
+    [SwaggerOperation(Tags = new[] { "Workspace - Resources" })]
+    public async Task<IActionResult> UpdateWorkspaceResource([FromRoute] string workspaceId, [FromRoute] string resourceId, [FromBody] UpdateWorkspaceResourceRequest request)
     {
         // * Create a command
-        var command = UpdateResourceCommand.Create(resourceId, organizationId, ResourceLevel.Organization, request.Title, request.Url, request.Description, request.Type);
+        var command = UpdateResourceCommand.Create(resourceId, workspaceId, ResourceLevel.Workspace, request.Title, request.Url, request.Description, request.Type);
 
         // ? Were there any validation errors?
         if (command.IsFailure)
@@ -31,7 +31,7 @@ public class UpdateOrganizationResourceEndpoint(ICommandDispatcher dispatcher) :
             : Ok(Transform(command)); // * Return the resource
     }
 
-    public record UpdateOrganizationResourceRequest(string? Title, string? Url, string? Description, string? Type);
+    public record UpdateWorkspaceResourceRequest(string? Title, string? Url, string? Description, string? Type);
 
     private DTOs.ResourceDTO Transform(UpdateResourceCommand command)
     {
@@ -41,5 +41,5 @@ public class UpdateOrganizationResourceEndpoint(ICommandDispatcher dispatcher) :
         // * Create the DTO
         return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
     }
-
+    
 }

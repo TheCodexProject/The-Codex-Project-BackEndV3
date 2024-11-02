@@ -20,7 +20,6 @@
 
     <ItemGroup>
       <Folder Include="endpoints\project\resource\" />
-      <Folder Include="endpoints\workspace\resource\" />
     </ItemGroup>
 
 </Project>

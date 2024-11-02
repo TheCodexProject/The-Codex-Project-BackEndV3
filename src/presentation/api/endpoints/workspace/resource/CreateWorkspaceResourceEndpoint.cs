@@ -5,17 +5,17 @@ using domain.models.resource.values;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace api.endpoints.organization.resource;
+namespace api.endpoints.workspace.resource;
 
-[ApiExplorerSettings(GroupName = "Organizations")]
-public class CreateOrganizationResourceEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
+[ApiExplorerSettings(GroupName = "Workspaces")]
+public class CreateWorkspaceResourceEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
-    [HttpPost("organization/{organizationId}/resources")]
-    [SwaggerOperation(Tags = new[] { "Organization - Resources" })]
-    public async Task<IActionResult> HandleAsync([FromRoute] string organizationId, [FromBody] CreateOrganizationResourceRequest request)
+    [HttpPost("workspace/{workspaceId}/resources")]
+    [SwaggerOperation(Tags = new[] { "Workspace - Resources" })]
+    public async Task<IActionResult> HandleAsync([FromRoute] string workspaceId, [FromBody] CreateWorkspaceResourceRequest request)
     {
         // * Create the request
-        var cmd = CreateResourceCommand.Create(request.title, request.url, organizationId, ResourceLevel.Organization);
+        var cmd = CreateResourceCommand.Create(request.title, request.url, workspaceId, ResourceLevel.Workspace);
 
         // ? Were there any validation errors?
         if (cmd.IsFailure)
@@ -30,7 +30,8 @@ public class CreateOrganizationResourceEndpoint(ICommandDispatcher commandDispat
             : Ok(new CreateResourceResponse(cmd.Value.Id.ToString())); // * Return the ID of the created resource
     }
 
-    public record CreateOrganizationResourceRequest(string title, string url);
+    public record CreateWorkspaceResourceRequest(string title, string url);
 
     private record CreateResourceResponse(string Id);
+
 }
