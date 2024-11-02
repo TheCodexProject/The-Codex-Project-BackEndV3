@@ -1,5 +1,6 @@
 using domain.models.organization;
 using domain.models.project;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem;
 using domain.models.workspace;
@@ -17,6 +18,7 @@ public interface IUnitOfWork
     IRepository<Workspace> Workspaces { get; }
     IRepository<Project> Projects { get; }
     IRepository<WorkItem> WorkItems { get; }
+    IRepository<Resource> Resources { get; }
 
     /// <summary>
     /// Save changes to the database

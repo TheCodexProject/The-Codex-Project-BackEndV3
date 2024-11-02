@@ -1,14 +1,20 @@
 ﻿using domain.exceptions;
 using domain.models.resource;
+using domain.models.resource.values;
 using OperationResult;
 
 namespace application.appEntry.commands.resource;
 
 public class GetResourceCommand
 {
+    // NOTE: Given information
     public Guid Id { get; set; }
+    public Guid OwnerId { get; set; }
+    public ResourceLevel Level { get; set; }
 
+    // NOTE: Result information
     public Resource? Resource { get; set; } = null;
+
 
     private GetResourceCommand(Guid id)
     {
