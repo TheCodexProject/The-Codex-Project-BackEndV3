@@ -175,20 +175,10 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
-    public Result AddResource(string title, string url)
+    public Result AddResource(Resource resource)
     {
-        // * Try to create a new resource.
-        var resourceResult = Resource.Create(title, url,Id, ResourceLevel.Organization);
-        
-        // ? Is the resource a failure?
-        if (resourceResult.IsFailure)
-        {
-            // ! Return the failure.
-            return Result.Failure(resourceResult.Errors.ToArray());
-        }
-        
         // * Add the resource to the organization.
-        var addValidationResult = OrganizationPropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
+        var addValidationResult = OrganizationPropertyValidator.ValidateAddResource(resource, Resources);
         
         // ? Is the add validation a failure?
         if (addValidationResult.IsFailure)
@@ -197,8 +187,7 @@ public class Organization : IResourceOwner
             return Result.Failure(addValidationResult.Errors.ToArray());
         }
         
-        Resources.Add(resourceResult.Value);
-
+        Resources.Add(resource);
         return Result.Success();
     }
     

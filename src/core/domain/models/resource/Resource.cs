@@ -13,8 +13,8 @@ public class Resource
     public DateTime CreatedAt { get; private set; }
     public string CreatedBy { get; private set; }
 
-    public DateTime UpdatedAt { get; private set; }
-    public string UpdatedBy { get; private set; }
+    public DateTime UpdatedAt { get; private set; } = DateTime.MinValue;
+    public string UpdatedBy { get; private set; } = string.Empty;
 
     // # PROPERTIES #
     [Required]

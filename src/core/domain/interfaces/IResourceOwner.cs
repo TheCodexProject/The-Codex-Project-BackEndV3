@@ -9,7 +9,7 @@ namespace domain.interfaces;
 public interface IResourceOwner
 {
     public List<Resource> Resources { get; }
-    public Result AddResource(string title, string url);
+    public Result AddResource(Resource resource);
 
     public Result RemoveResource(Resource resource);
 }

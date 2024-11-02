@@ -147,28 +147,18 @@ public class Workspace : IResourceOwner
         return Result.Success();
     }
 
-    public Result AddResource(string title, string url)
+    public Result AddResource(Resource resource)
     {
-        // * Try to create a new resource.
-        var resourceResult = Resource.Create(title, url, Id, ResourceLevel.Workspace);
-        
-        // ? Is the resource a failure?
-        if (resourceResult.IsFailure)
-        {
-            return Result.Failure(resourceResult.Errors.ToArray());
-        }
-        
         // * Add the resource to the workspace.
-        var addValidationResult = WorkspacePropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
-        
+        var addValidationResult = WorkspacePropertyValidator.ValidateAddResource(resource, Resources);
+
         // ? Is the add validation a failure?
         if (addValidationResult.IsFailure)
         {
             return Result.Failure(addValidationResult.Errors.ToArray());
         }
-        
-        Resources.Add(resourceResult.Value);
-        
+
+        Resources.Add(resource);
         return Result.Success();
     }
     

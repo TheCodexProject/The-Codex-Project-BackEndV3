@@ -69,7 +69,7 @@ public class Project : IResourceOwner
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
-        CreatedBy = workspace.Owner.Owner.Email;
+        CreatedBy = "TO DO: Implement User";
 
         Workspace = workspace;
         workspace.AddProject(this);
@@ -193,24 +193,16 @@ public class Project : IResourceOwner
         return Result.Success();
     }
 
-    public Result AddResource(string title, string url)
+    public Result AddResource(Resource resource)
     {
-        // * Try to create a new resource.
-        var resourceResult = Resource.Create(title, url, Id, ResourceLevel.Project);
-        
-        // ? Is the resource creation a failure?
-        if (resourceResult.IsFailure)
-            return Result.Failure(resourceResult.Errors.ToArray());
-        
         // * Add the resource to the project.
-        var addValidationResult = ProjectPropertyValidator.ValidateAddResource(resourceResult.Value, Resources);
+        var addValidationResult = ProjectPropertyValidator.ValidateAddResource(resource, Resources);
         
         // ? Is the validation a failure?
         if (addValidationResult.IsFailure)
             return Result.Failure(addValidationResult.Errors.ToArray());
         
-        Resources.Add(resourceResult.Value);
-        
+        Resources.Add(resource);
         return Result.Success();
     }
 

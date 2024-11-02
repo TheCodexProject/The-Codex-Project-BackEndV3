@@ -4,6 +4,7 @@ using domain.exceptions;
 using domain.interfaces;
 using domain.models.organization;
 using domain.models.project;
+using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.workspace;
 using OperationResult;
@@ -22,21 +23,24 @@ public class CreateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cre
             // ! Return the error
             return Result.Failure(owner.Errors.ToArray());
 
+        // * Create the resource
+        var resource = Resource.Create(command.Title, command.Url, command.OwnerId, command.Level);
+
+        // ? Was the resource created successfully?
+        if(resource.IsFailure)
+            // ! Return the error
+            return Result.Failure(resource.Errors.ToArray());
+
         // * Add the resource to the owner
-        var addResourceResult = owner.Value.AddResource(command.Title, command.Url);
+        var addResourceResult = owner.Value.AddResource(resource.Value);
 
         // ? Were there any validation errors?
         if(addResourceResult.IsFailure)
             // ! Return the error
             return Result.Failure(addResourceResult.Errors.ToArray());
 
-        // * Update the owner in the database
-        var updateResult = UpdateOwnerAsync(owner.Value);
-
-        // ? Did the update fail?
-        if(updateResult.IsFailure)
-            // ! Return the error
-            return Result.Failure(updateResult.Errors.ToArray());
+        // Save the resource to the database
+        await unitOfWork.Resources.AddAsync(resource);
 
         // ? Did the save fail?
         if (await unitOfWork.SaveChangesAsync() == 0)
@@ -44,6 +48,7 @@ public class CreateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cre
             return Result.Failure(new FailedOperationException("Failed to save the resource to the database."));
 
         // * Return the success result
+        command.Id = resource.Value.Id;
         return Result.Success();
     }
 

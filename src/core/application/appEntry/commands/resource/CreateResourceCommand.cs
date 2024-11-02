@@ -1,4 +1,5 @@
-﻿using domain.models.resource;
+﻿using domain.exceptions;
+using domain.models.resource;
 using domain.models.resource.values;
 using OperationResult;
 
@@ -15,29 +16,35 @@ public class CreateResourceCommand
 
     public ResourceLevel Level { get; set; }
 
-    private CreateResourceCommand(string title, string url)
+    private CreateResourceCommand(string title, string url, Guid ownerId, ResourceLevel level)
     {
         Title = title;
         Url = url;
+        OwnerId = ownerId;
+        Level = level;
     }
 
-    public static Result<CreateResourceCommand> Create(string title, string url)
+    public static Result<CreateResourceCommand> Create(string title, string url, string ownerId, ResourceLevel level)
     {
         // ! Validate the input
-        var validationResult = Validate(title, url);
+        var validationResult = Validate(title, url, ownerId);
 
         // ? Were there any validation errors?
         if (validationResult.IsFailure)
             return Result<CreateResourceCommand>.Failure(validationResult.Errors.ToArray());
 
         // * Return the newly created command
-        return new CreateResourceCommand(title, url);
+        return new CreateResourceCommand(title, url, new Guid(ownerId), level);
     }
 
-    private static Result Validate(string title, string url)
+    private static Result Validate(string title, string url, string ownerId)
     {
         // * List for exceptions during validation
         List<Exception> exceptions = [];
+
+        // ! Validate the owner ID (Guid)
+        if (!Guid.TryParse(ownerId, out var parsedWorkspaceId))
+            return Result.Failure(new FailedOperationException("The given Owner ID could not be parsed into a GUID"));
 
         // ! Validate the title
         var titleValidation = ResourcePropertyValidator.ValidateTitle(title);
@@ -52,6 +59,8 @@ public class CreateResourceCommand
         // ? Did the URL validation fail?
         if (urlValidation.IsFailure)
             exceptions.AddRange(urlValidation.Errors);
+
+        ;
 
         // ? Were there any exceptions?
         return exceptions.Count != 0
