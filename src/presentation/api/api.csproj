@@ -10,11 +10,18 @@
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\core\application\application.csproj" />
       <ProjectReference Include="..\..\infrastructure\entityFrameworkCore\entityFrameworkCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="endpoints\organization\resource\" />
+      <Folder Include="endpoints\project\resource\" />
+      <Folder Include="endpoints\workspace\resource\" />
     </ItemGroup>
 
 </Project>
