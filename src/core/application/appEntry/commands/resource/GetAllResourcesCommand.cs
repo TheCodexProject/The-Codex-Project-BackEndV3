@@ -1,4 +1,5 @@
-﻿using domain.models.resource;
+﻿using domain.exceptions;
+using domain.models.resource;
 using domain.models.resource.values;
 using OperationResult;
 
@@ -13,11 +14,18 @@ public class GetAllResourcesCommand
     // NOTE: Result information
     public List<Resource> Resources { get; set; } = [];
 
-    private GetAllResourcesCommand() { }
-
-    public static Result<GetAllResourcesCommand> Create()
+    private GetAllResourcesCommand(Guid ownerId, ResourceLevel level)
     {
-        // ! No validation needed here.
-        return new GetAllResourcesCommand();
+        OwnerId = ownerId;
+        Level = level;
+    }
+
+    public static Result<GetAllResourcesCommand> Create(string ownerId, ResourceLevel level)
+    {
+        // ? Is the ID valid?
+        if (!Guid.TryParse(ownerId, out var parsedWorkspaceId))
+            return Result<GetAllResourcesCommand>.Failure(new FailedOperationException("The given Owner ID could not be parsed into a GUID"));
+
+        return new GetAllResourcesCommand(new Guid(ownerId), level);
     }
 }

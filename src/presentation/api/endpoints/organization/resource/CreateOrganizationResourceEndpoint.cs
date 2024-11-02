@@ -10,7 +10,7 @@ namespace api.endpoints.organization.resource;
 [ApiExplorerSettings(GroupName = "Organizations")]
 public class CreateOrganizationResourceEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
-    [HttpPost("organization/{id}/resource")]
+    [HttpPost("organization/{id}/resources")]
     [SwaggerOperation(Tags = new[] { "Organization - Resources" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string id, [FromBody] CreateResourceRequest request)
     {

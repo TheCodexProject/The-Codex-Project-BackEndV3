@@ -21,6 +21,7 @@ public class WorkspaceRepository(LocalDbContext context) : IRepository<Workspace
             .Include(workspace => workspace.Contacts)
             .Include(workspace => workspace.Projects)
             .Include(workspace => workspace.Owner)
+            .Include(workspace => workspace.Resources)
             .FirstOrDefaultAsync(workspace => workspace.Id == id);
     }
 
