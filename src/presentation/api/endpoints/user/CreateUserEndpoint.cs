@@ -2,12 +2,15 @@
 using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.user;
 
+[ApiExplorerSettings(GroupName = "Users")]
 public class CreateUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPost("users")]
+    [SwaggerOperation(Tags = new[] { "User" })]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserRequest request)
     {
         // * Create the request
