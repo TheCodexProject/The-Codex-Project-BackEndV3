@@ -1,5 +1,6 @@
 ﻿using domain.models.organization;
 using domain.models.project;
+using domain.models.projectActivity;
 using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem;
@@ -18,6 +19,7 @@ public class LocalDbContext: DbContext
     public DbSet<Project> Projects { get; init; }
     public DbSet<WorkItem> WorkItems { get; init; }
     public DbSet<Resource> Resources { get; init; }
+    public DbSet<ProjectActivity> ProjectActivities { get; init; }
 
     // # CONSTRUCTORS #
     

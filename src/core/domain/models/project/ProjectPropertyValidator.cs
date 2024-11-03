@@ -1,4 +1,5 @@
 ﻿using domain.exceptions;
+using domain.models.projectActivity;
 using domain.models.resource;
 using domain.models.workItem;
 using domain.shared;
@@ -154,5 +155,33 @@ public static class ProjectPropertyValidator
         return resources.Contains(resource)
             ? Result.Success()
             : Result.Failure(new InvalidArgumentException("The provided resource does not exist in the list."));
+    }
+
+    public static Result ValidateAddActivity(ProjectActivity? activity, List<ProjectActivity> activities)
+    {
+        // ? Is the activity null or empty?
+        if (activity == null)
+        {
+            return Result.Failure(new InvalidArgumentException("The provided activity is invalid. Activity cannot be null."));
+        }
+
+        // ? Does the activity already exist in the list?
+        return activities.Contains(activity)
+            ? Result.Failure(new InvalidArgumentException("The provided activity already exists in the list."))
+            : Result.Success();
+    }
+
+    public static Result ValidateRemoveActivity(ProjectActivity? activity, List<ProjectActivity> activities)
+    {
+        // ? Is the activity null or empty?
+        if (activity == null)
+        {
+            return Result.Failure(new InvalidArgumentException("The provided activity is invalid. Activity cannot be null."));
+        }
+
+        // ? Does the activity exist in the list?
+        return activities.Contains(activity)
+            ? Result.Success()
+            : Result.Failure(new InvalidArgumentException("The provided activity does not exist in the list."));
     }
 }
