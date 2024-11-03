@@ -5,19 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace entityFrameworkCore.repositories;
 
-public class MilestoneRepository(LocalDbContext context) : IRepository<ProjectActivity>
+/// <summary>
+/// The repository for project iterations
+/// </summary>
+public class ProjectActivityRepository(LocalDbContext context) : IRepository<ProjectActivity>
 {
     public async Task<IEnumerable<ProjectActivity>> GetAllAsync()
     {
         return await context.ProjectActivities
-            .Where(projectActivity => projectActivity.Type == ProjectActivityType.Milestone)
             .ToListAsync();
     }
 
     public async Task<ProjectActivity?> GetByIdAsync(Guid id)
     {
         return await context.ProjectActivities
-            .Where(projectActivity => projectActivity.Type == ProjectActivityType.Milestone)
             .FirstOrDefaultAsync(projectActivity => projectActivity.Id == id);
     }
 

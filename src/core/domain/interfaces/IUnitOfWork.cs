@@ -20,8 +20,7 @@ public interface IUnitOfWork
     IRepository<Project> Projects { get; }
     IRepository<WorkItem> WorkItems { get; }
     IRepository<Resource> Resources { get; }
-    IRepository<ProjectActivity> Milestones { get; }
-    IRepository<ProjectActivity> Iterations { get; }
+    IRepository<ProjectActivity> ProjectActivities { get; }
 
     /// <summary>
     /// Save changes to the database

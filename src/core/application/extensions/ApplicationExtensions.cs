@@ -1,5 +1,6 @@
 using application.appEntry.commands.organization;
 using application.appEntry.commands.project;
+using application.appEntry.commands.projectActivity;
 using application.appEntry.commands.resource;
 using application.appEntry.commands.user;
 using application.appEntry.commands.workItem;
@@ -8,6 +9,7 @@ using application.appEntry.dispatcher;
 using application.appEntry.interfaces;
 using application.features.organization;
 using application.features.project;
+using application.features.projectActivity;
 using application.features.resource;
 using application.features.user;
 using application.features.workItem;
@@ -73,6 +75,15 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllResourcesCommand>, GetAllResourcesHandler>();
         services.AddScoped<ICommandHandler<UpdateResourceCommand>,UpdateResourceHandler>();
         services.AddScoped<ICommandHandler<DeleteResourceCommand>, DeleteResourceHandler>();
+
+        // * ------------------------- *
+        // * Project Activity Handlers *
+        // * ------------------------- *
+        services.AddScoped<ICommandHandler<CreateProjectActivityCommand>,CreateProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<GetProjectActivityCommand>, GetProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<GetAllProjectActivitiesCommand>, GetAllProjectActivitiesHandler>();
+        services.AddScoped<ICommandHandler<UpdateProjectActivityCommand>,UpdateProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<DeleteProjectActivityCommand>, DeleteProjectActivityHandler>();
     }
 
 

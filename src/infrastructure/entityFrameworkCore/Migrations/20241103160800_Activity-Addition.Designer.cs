@@ -11,8 +11,8 @@ using entityFrameworkCore;
 namespace entityFrameworkCore.Migrations
 {
     [DbContext(typeof(LocalDbContext))]
-    [Migration("20241103150741_ProjectActivity-Changes")]
-    partial class ProjectActivityChanges
+    [Migration("20241103160800_Activity-Addition")]
+    partial class ActivityAddition
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

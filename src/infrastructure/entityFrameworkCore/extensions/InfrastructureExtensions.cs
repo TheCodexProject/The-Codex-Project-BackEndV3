@@ -21,8 +21,7 @@ public static class InfrastructureExtensions
         services.AddScoped<IRepository<Project>, ProjectRepository>();
         services.AddScoped<IRepository<Organization>, OrganizationRepository>();
         services.AddScoped<IRepository<Resource>, ResourceRepository>();
-        services.AddScoped<IRepository<ProjectActivity>, MilestoneRepository>();
-        services.AddScoped<IRepository<ProjectActivity>, IterationRepository>();
+        services.AddScoped<IRepository<ProjectActivity>, ProjectActivityRepository>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection services)

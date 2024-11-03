@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace entityFrameworkCore.Migrations
 {
     /// <inheritdoc />
-    public partial class ProjectActivityChanges : Migration
+    public partial class ActivityAddition : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -74,13 +74,13 @@ public class WorkItem
     
     public List<Resource> Resources { get; private set; } = new List<Resource>();
 
-    private List<ProjectActivity> _IsAPartOf = new List<ProjectActivity>();
+    private List<ProjectActivity> _isAPartOf = new List<ProjectActivity>();
 
     [NotMapped]
-    public ReadOnlyCollection<ProjectActivity> Milestones => _IsAPartOf.FindAll(activity => activity.Type == ProjectActivityType.Milestone).AsReadOnly();
+    public ReadOnlyCollection<ProjectActivity> Milestones => _isAPartOf.FindAll(activity => activity.Type == ProjectActivityType.Milestone).AsReadOnly();
 
     [NotMapped]
-    public ReadOnlyCollection<ProjectActivity> Iterations => _IsAPartOf.FindAll(activity => activity.Type == ProjectActivityType.Iteration).AsReadOnly();
+    public ReadOnlyCollection<ProjectActivity> Iterations => _isAPartOf.FindAll(activity => activity.Type == ProjectActivityType.Iteration).AsReadOnly();
 
     // # CONSTRUCTORS #
 
@@ -262,26 +262,26 @@ public class WorkItem
     public Result AddActivity(ProjectActivity activity)
     {
         // ? Validate the input.
-        var result = WorkItemPropertyValidator.ValidateAddActivity(activity, _IsAPartOf);
+        var result = WorkItemPropertyValidator.ValidateAddActivity(activity, _isAPartOf);
 
         // ? Is the validation a failure?
         if (result.IsFailure)
             return Result.Failure(result.Errors.ToArray());
 
-        _IsAPartOf.Add(activity);
+        _isAPartOf.Add(activity);
         return Result.Success();
     }
 
     public Result RemoveActivity(ProjectActivity activity)
     {
         // ? Validate the input.
-        var result = WorkItemPropertyValidator.ValidateRemoveActivity(activity, _IsAPartOf);
+        var result = WorkItemPropertyValidator.ValidateRemoveActivity(activity, _isAPartOf);
 
         // ? Is the validation a failure?
         if (result.IsFailure)
             return Result.Failure(result.Errors.ToArray());
 
-        _IsAPartOf.Remove(activity);
+        _isAPartOf.Remove(activity);
         return Result.Success();
     }
 }
