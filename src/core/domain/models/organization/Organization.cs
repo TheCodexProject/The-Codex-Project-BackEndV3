@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.interfaces;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
 using OperationResult;
@@ -8,7 +11,7 @@ namespace domain.models.organization;
 /// <summary>
 /// Represents an organization.
 /// </summary>
-public class Organization
+public class Organization : IResourceOwner
 {
     // # METADATA #
     [Key]
@@ -45,7 +48,9 @@ public class Organization
     public List<User> Members { get; private set; } = new List<User>();
 
     public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
-
+    
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
+    
     // # CONSTRUCTORS #
 
     // NOTE: EF Core requires a parameterless constructor.
@@ -167,6 +172,38 @@ public class Organization
         }
 
         Workspaces.Remove(workspace);
+        return Result.Success();
+    }
+
+    public Result AddResource(Resource resource)
+    {
+        // * Add the resource to the organization.
+        var addValidationResult = OrganizationPropertyValidator.ValidateAddResource(resource, Resources);
+        
+        // ? Is the add validation a failure?
+        if (addValidationResult.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        }
+        
+        Resources.Add(resource);
+        return Result.Success();
+    }
+    
+    public Result RemoveResource(Resource resource)
+    {
+        // ! Validate the resource.
+        var result = OrganizationPropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the result a failure?
+        if (result.IsFailure)
+        {
+            // ! Return the failure.
+            return Result.Failure(result.Errors.ToArray());
+        }
+
+        Resources.Remove(resource);
         return Result.Success();
     }
 }

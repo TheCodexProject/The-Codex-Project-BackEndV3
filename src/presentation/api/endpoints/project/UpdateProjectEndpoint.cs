@@ -3,12 +3,15 @@ using api.endpoints.organization.models;
 using application.appEntry.commands.project;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.project;
 
+[ApiExplorerSettings(GroupName = "Projects")]
 public class UpdateProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPut("/projects/{id}")]
+    [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> UpdateProject([FromRoute] string id, [FromBody] UpdateProjectRequest request)
     {
         // * Create the request

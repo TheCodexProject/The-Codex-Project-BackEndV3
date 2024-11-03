@@ -2,12 +2,15 @@
 using application.appEntry.commands.workItem;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workItem;
 
+[ApiExplorerSettings(GroupName = "WorkItems")]
 public class UpdateWorkItemEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPut("/workItems/{id}")]
+    [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> UpdateWorkItem([FromRoute] string id, [FromBody] UpdateWorkItemRequest request)
     {
         // * Create the request

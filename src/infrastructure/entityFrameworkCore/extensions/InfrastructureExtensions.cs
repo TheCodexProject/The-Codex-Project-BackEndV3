@@ -1,6 +1,7 @@
 ﻿using domain.interfaces;
 using domain.models.organization;
 using domain.models.project;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem;
 using domain.models.workspace;
@@ -18,6 +19,7 @@ public static class InfrastructureExtensions
         services.AddScoped<IRepository<User>, UserRepository>();
         services.AddScoped<IRepository<Project>, ProjectRepository>();
         services.AddScoped<IRepository<Organization>, OrganizationRepository>();
+        services.AddScoped<IRepository<Resource>, ResourceRepository>();
     }
 
     public static void RegisterUnitOfWork(this IServiceCollection services)

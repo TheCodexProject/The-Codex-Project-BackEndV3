@@ -2,12 +2,15 @@
 using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.organization;
 
+[ApiExplorerSettings(GroupName = "Organizations")]
 public class DeleteOrganizationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpDelete("organizations/{id}")]
+    [SwaggerOperation(Tags = new[] { "Organization" })]
     public async Task<IActionResult> DeleteOrganization([FromRoute] string id)
     {
         // * Create the request

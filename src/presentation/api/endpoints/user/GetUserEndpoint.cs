@@ -3,12 +3,15 @@ using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using domain.models.user;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.user;
 
+[ApiExplorerSettings(GroupName = "Users")]
 public class GetUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("users/{id}")]
+    [SwaggerOperation(Tags = new[] { "User" })]
     public async Task<IActionResult> GetUser([FromRoute] string id)
     {
         // * Create the request

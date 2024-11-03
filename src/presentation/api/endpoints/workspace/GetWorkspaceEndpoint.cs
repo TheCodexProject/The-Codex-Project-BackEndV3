@@ -3,12 +3,15 @@ using api.endpoints.organization.models;
 using application.appEntry.commands.workspace;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workspace;
 
+[ApiExplorerSettings(GroupName = "Workspaces")]
 public class GetWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpGet("/workspaces/{id}")]
+    [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> GetWorkspace([FromRoute] string id)
     {
         // * Create the request

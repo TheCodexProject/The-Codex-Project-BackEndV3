@@ -3,12 +3,15 @@ using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using domain.models.user;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.user;
 
+[ApiExplorerSettings(GroupName = "Users")]
 public class UpdateUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPut("users/{id}")]
+    [SwaggerOperation(Tags = new[] { "User" })]
     public async Task<IActionResult> UpdateUser([FromRoute] string id, [FromBody] UpdateUserRequest request)
     {
         // * Create the request

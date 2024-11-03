@@ -2,12 +2,15 @@
 using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.organization;
 
+[ApiExplorerSettings(GroupName = "Organizations")]
 public class CreateOrganizationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPost("organizations")]
+    [SwaggerOperation(Tags = new[] { "Organization" })]
     public async Task<IActionResult> CreateOrganization([FromBody] CreateOrganizationRequest request)
     {
         // * Create the request

@@ -4,12 +4,15 @@ using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using domain.models.organization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.organization;
 
+[ApiExplorerSettings(GroupName = "Organizations")]
 public class UpdateOrganizationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpPut("organizations/{id}")]
+    [SwaggerOperation(Tags = new[] { "Organization" })]
     public async Task<IActionResult> UpdateOrganization([FromRoute] string id, [FromBody] UpdateOrganizationRequest request)
     {
         // * Create the request

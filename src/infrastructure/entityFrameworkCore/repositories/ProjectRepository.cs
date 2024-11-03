@@ -19,6 +19,7 @@ public class ProjectRepository(LocalDbContext context) : IRepository<Project>
         return await context.Projects
             .Include(project => project.Workspace)
             .Include(project => project.Tasks)
+            .Include(project => project.Resources)
             .FirstOrDefaultAsync(project => project.Id == id);
     }
 

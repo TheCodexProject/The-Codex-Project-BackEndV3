@@ -19,6 +19,7 @@ public class OrganizationRepository(LocalDbContext context) : IRepository<Organi
         return await context.Organizations
             .Include(organization => organization.Owner)
             .Include(organization => organization.Members)
+            .Include(organization => organization.Resources)
             .FirstOrDefaultAsync(organization => organization.Id == id);
     }
 
