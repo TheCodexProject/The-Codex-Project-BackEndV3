@@ -48,14 +48,6 @@ public class CreateProjectActivityHandler(IUnitOfWork unitOfWork) : ICommandHand
                 break;
         }
 
-        // * Add the activity to the project
-        var addActivityResult = project.AddActivity(activity);
-
-        // ? Were there any validation errors?
-        if (addActivityResult.IsFailure)
-            // ! Return the error
-            return Result.Failure(addActivityResult.Errors.ToArray());
-
         // * Save the activity to the database
         await unitOfWork.ProjectActivities.AddAsync(activity);
 

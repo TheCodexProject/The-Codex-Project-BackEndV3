@@ -13,12 +13,16 @@ public class ProjectActivityRepository(LocalDbContext context) : IRepository<Pro
     public async Task<IEnumerable<ProjectActivity>> GetAllAsync()
     {
         return await context.ProjectActivities
+            .Include(projectActivity => projectActivity.Project)
+            .Include(projectActivity => projectActivity.WorkItems)
             .ToListAsync();
     }
 
     public async Task<ProjectActivity?> GetByIdAsync(Guid id)
     {
         return await context.ProjectActivities
+            .Include(projectActivity => projectActivity.Project)
+            .Include(projectActivity => projectActivity.WorkItems)
             .FirstOrDefaultAsync(projectActivity => projectActivity.Id == id);
     }
 

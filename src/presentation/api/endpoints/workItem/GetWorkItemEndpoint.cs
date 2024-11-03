@@ -1,5 +1,5 @@
 ﻿using api.endpoints.common;
-using api.endpoints.organization.models;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.workItem;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;

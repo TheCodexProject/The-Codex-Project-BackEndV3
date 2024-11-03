@@ -63,13 +63,13 @@ public class Project : IResourceOwner
 
     public List<Resource> Resources { get; private set; } = new List<Resource>();
 
-    private List<ProjectActivity> _activities { get; set; } = new List<ProjectActivity>();
+    public List<ProjectActivity> ProjectActivities { get; set; } = new List<ProjectActivity>();
 
     [NotMapped]
-    public List<ProjectActivity> Milestones => _activities.FindAll(activity => activity.Type == ProjectActivityType.Milestone);
+    public List<ProjectActivity> Milestones => ProjectActivities.FindAll(activity => activity.Type == ProjectActivityType.Milestone);
 
     [NotMapped]
-    public List<ProjectActivity> Iterations => _activities.FindAll(activity => activity.Type == ProjectActivityType.Iteration);
+    public List<ProjectActivity> Iterations => ProjectActivities.FindAll(activity => activity.Type == ProjectActivityType.Iteration);
 
     // # CONSTRUCTORS #
 
@@ -233,26 +233,26 @@ public class Project : IResourceOwner
     public Result AddActivity(ProjectActivity activity)
     {
         // ? Validate the input.
-        var result = ProjectPropertyValidator.ValidateAddActivity(activity, _activities);
+        var result = ProjectPropertyValidator.ValidateAddActivity(activity, ProjectActivities);
 
         // ? Is the validation a failure?
         if (result.IsFailure)
             return Result.Failure(result.Errors.ToArray());
 
-        _activities.Add(activity);
+        ProjectActivities.Add(activity);
         return Result.Success();
     }
 
     public Result RemoveActivity(ProjectActivity activity)
     {
         // ? Validate the input.
-        var result = ProjectPropertyValidator.ValidateRemoveActivity(activity, _activities);
+        var result = ProjectPropertyValidator.ValidateRemoveActivity(activity, ProjectActivities);
 
         // ? Is the validation a failure?
         if (result.IsFailure)
             return Result.Failure(result.Errors.ToArray());
 
-        _activities.Remove(activity);
+        ProjectActivities.Remove(activity);
         return Result.Success();
     }
 }

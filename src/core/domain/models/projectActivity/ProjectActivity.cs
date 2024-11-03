@@ -71,25 +71,27 @@ public class ProjectActivity
     /// A reference to the project that the project phase belongs to.
     /// </summary>
     [Required]
-    public Project BelongsTo { get; }
+    public Guid ProjectId { get; }
+
+    public Project Project { get; private set; }
 
     // # CONSTRUCTORS #
 
     // NOTE: EF Core requires a parameterless constructor.
     private ProjectActivity() { }
 
-    private ProjectActivity(Project belongsTo, string title, ProjectActivityType type)
+    private ProjectActivity(Project project, string title, ProjectActivityType type)
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
         CreatedBy = "TODO: Implement";
 
-        BelongsTo = belongsTo;
+        ProjectId = project.Id;
         Title = title;
         Type = type;
     }
 
-    public static Result<ProjectActivity> Create(Project belongsTo, string title, ProjectActivityType type)
+    public static Result<ProjectActivity> Create(Project projectId, string title, ProjectActivityType type)
     {
         // ! Validate the project phase's input here.
         var validationResult = Validate( title, type);
@@ -99,10 +101,10 @@ public class ProjectActivity
             // ! Return the errors
             return Result<ProjectActivity>.Failure(validationResult.Errors.ToArray());
 
-        var projectActivity = new ProjectActivity(belongsTo, title, type);
+        var projectActivity = new ProjectActivity(projectId, title, type);
 
         // ! Try to add the project phase to the project
-        var addProjectPhaseResult = belongsTo.AddActivity(projectActivity);
+        var addProjectPhaseResult = projectId.AddActivity(projectActivity);
 
         // ? Was the project phase added successfully?
         if (addProjectPhaseResult.IsFailure)
