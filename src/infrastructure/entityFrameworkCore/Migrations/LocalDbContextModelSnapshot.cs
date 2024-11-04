@@ -134,6 +134,48 @@ namespace entityFrameworkCore.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("domain.models.projectActivity.ProjectActivity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProjectId1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId1");
+
+                    b.ToTable("ProjectActivities");
+                });
+
             modelBuilder.Entity("domain.models.resource.Resource", b =>
                 {
                     b.Property<Guid>("Id")
@@ -380,6 +422,17 @@ namespace entityFrameworkCore.Migrations
                     b.Navigation("Workspace");
                 });
 
+            modelBuilder.Entity("domain.models.projectActivity.ProjectActivity", b =>
+                {
+                    b.HasOne("domain.models.project.Project", "Project")
+                        .WithMany("ProjectActivities")
+                        .HasForeignKey("ProjectId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
             modelBuilder.Entity("domain.models.resource.Resource", b =>
                 {
                     b.HasOne("domain.models.organization.Organization", null)
@@ -442,6 +495,8 @@ namespace entityFrameworkCore.Migrations
 
             modelBuilder.Entity("domain.models.project.Project", b =>
                 {
+                    b.Navigation("ProjectActivities");
+
                     b.Navigation("Resources");
 
                     b.Navigation("Tasks");

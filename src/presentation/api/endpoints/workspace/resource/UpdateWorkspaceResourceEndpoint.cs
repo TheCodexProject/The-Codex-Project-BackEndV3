@@ -1,5 +1,5 @@
 ﻿using api.endpoints.common;
-using api.endpoints.organization.models;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.resource;
 using application.appEntry.interfaces;
 using domain.models.resource.values;
