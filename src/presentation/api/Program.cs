@@ -72,6 +72,16 @@ builder.Services.AddSwaggerGen(c =>
     // c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost3000",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // # --------------------- #
 // #     CONTROLLERS       #
@@ -129,6 +139,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/WorkItems/swagger.json", "WorkItems API");
     });
 }
+
+app.UseCors("AllowLocalhost3000");
 
 app.UseHttpsRedirection();
 
