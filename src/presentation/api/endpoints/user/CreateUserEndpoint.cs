@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,19 @@ public class CreateUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors) // ! Return the errors
-            : Ok(new CreateUserResponse(cmd.Value.Id.ToString())); // * Return the ID of the created user
+            : Ok(Transform(cmd)); // * Return the ID of the created user
     }
     public record CreateUserRequest(string FirstName, string LastName, string Email);
-    public record CreateUserResponse(string Id);
+
+    private DTOs.UserDTO Transform(CreateUserCommand cmd)
+    {
+        if (cmd.User is null)
+        {
+            return new DTOs.UserDTO("", "", "", "");
+        }
+
+        return new DTOs.UserDTO(cmd.User.Id.ToString(), cmd.User.FirstName, cmd.User.LastName, cmd.User.Email);
+    }
 
 
 

@@ -37,16 +37,16 @@ public class UpdateOrganizationEndpoint(ICommandDispatcher dispatcher) : Endpoin
     {
         if (cmd.Organization is null)
         {
-            return new DTOs.OrganizationDTO("","", new DTOs.UserDTO("", "", ""), new List<DTOs.UserDTO>());
+            return new DTOs.OrganizationDTO("","", new DTOs.UserDTO("", "","", ""), new List<DTOs.UserDTO>());
         }
 
         // Handle the possibility of null Owner or Members
         var owner = cmd.Organization.Owner != null
-            ? new DTOs.UserDTO(cmd.Organization.Owner.Id.ToString(), $"{cmd.Organization.Owner.FirstName} {cmd.Organization.Owner.LastName}", cmd.Organization.Owner.Email)
-            : new DTOs.UserDTO("", "", "");
+            ? new DTOs.UserDTO(cmd.Organization.Owner.Id.ToString(), cmd.Organization.Owner.FirstName, cmd.Organization.Owner.LastName, cmd.Organization.Owner.Email)
+            : new DTOs.UserDTO("", "", "", "");
 
         var members = cmd.Organization.Members != null
-            ? cmd.Organization.Members.Select(x => new DTOs.UserDTO(x.Id.ToString(), $"{x.FirstName} {x.LastName}", x.Email)).ToList()
+            ? cmd.Organization.Members.Select(x => new DTOs.UserDTO(x.Id.ToString(), x.FirstName, x.LastName, x.Email)).ToList()
             : new List<DTOs.UserDTO>();
 
         var dto = new DTOs.OrganizationDTO(cmd.Organization.Id.ToString(),cmd.Organization.Name, owner, members);
