@@ -31,14 +31,14 @@ public class CreateUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
     }
     public record CreateUserRequest(string FirstName, string LastName, string Email);
 
-    private DTOs.UserDTO Transform(CreateUserCommand cmd)
+    private UserDTO Transform(CreateUserCommand cmd)
     {
         if (cmd.User is null)
         {
-            return new DTOs.UserDTO("", "", "", "");
+            return new UserDTO("", "", "", "",[],[]);
         }
 
-        return new DTOs.UserDTO(cmd.User.Id.ToString(), cmd.User.FirstName, cmd.User.LastName, cmd.User.Email);
+        return new UserDTO(cmd.User.Id.ToString(), cmd.User.FirstName, cmd.User.LastName, cmd.User.Email,cmd.User.OwnedOrganizations.Select(x=>x.Id.ToString()).ToList(),cmd.User.Memberships.Select(x=>x.Id.ToString()).ToList());
     }
 
 

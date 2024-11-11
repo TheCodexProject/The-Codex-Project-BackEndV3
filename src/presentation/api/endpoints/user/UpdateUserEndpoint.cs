@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using domain.models.user;
@@ -27,10 +28,18 @@ public class UpdateUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors) // ! Return the errors
-            : Ok(new UpdateUserResponse(cmd.Value.User)); // * Return the ID of the created user
+            : Ok(Transform(cmd)); // * Return the ID of the created user
     }
 
     public record UpdateUserRequest(string? FirstName, string? LastName, string? Email);
 
-    private record UpdateUserResponse(User? User);
+    private UserDTO Transform(UpdateUserCommand cmd)
+    {
+        if (cmd.User is null)
+        {
+            return new UserDTO("", "", "", "",[],[]);
+        }
+
+        return new UserDTO(cmd.User.Id.ToString(), cmd.User.FirstName, cmd.User.LastName, cmd.User.Email,cmd.User.OwnedOrganizations.Select(x=>x.Id.ToString()).ToList(),cmd.User.Memberships.Select(x=>x.Id.ToString()).ToList());
+    }
 }
