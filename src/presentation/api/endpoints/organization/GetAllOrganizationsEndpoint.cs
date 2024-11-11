@@ -54,10 +54,10 @@ public class GetAllOrganizationsEndpoint(ICommandDispatcher dispatcher) : Endpoi
                     organization.Owner.LastName,
                     organization.Owner.Email,
                     organization.Owner.OwnedOrganizations != null
-                        ? organization.Owner.OwnedOrganizations.Select(x => x.ToString()).ToList()
+                        ? organization.Owner.OwnedOrganizations.Select(x => x.Id.ToString()).ToList()
                         : [],
                     organization.Owner.Memberships != null
-                        ? organization.Owner.Memberships.Select(x => x.ToString()).ToList()
+                        ? organization.Owner.Memberships.Select(x => x.Id.ToString()).ToList()
                         : []
                     )
                 : new UserDTO("", "", "", "", [], []);
