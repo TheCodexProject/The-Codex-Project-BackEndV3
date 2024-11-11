@@ -30,14 +30,14 @@ public class GetProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
             : Ok(Transform(cmd));
     }
 
-    private DTOs.ProjectDTO Transform(GetProjectCommand cmd)
+    private ProjectDTO Transform(GetProjectCommand cmd)
     {
         // * Extract the project from the command
         var project = cmd.Project;
 
         // * Create the DTO
-        return new DTOs.ProjectDTO(project.Id.ToString(), project.Title, project.Description, project.Status.ToString(), project.Priority.ToString(), [project.Start.ToString("yyyy-MM-dd HH:mm:ss"), project.End.ToString("yyyy-MM-dd HH:mm:ss")
-        ], project.Workspace.Title);
+        return new ProjectDTO(project.Id.ToString(), project.Title, project.Workspace.Title, project.Description, project.Status.ToString(), project.Priority.ToString(), [project.Start.ToString("yyyy-MM-dd HH:mm:ss"), project.End.ToString("yyyy-MM-dd HH:mm:ss")
+        ]);
     }
     
 }
