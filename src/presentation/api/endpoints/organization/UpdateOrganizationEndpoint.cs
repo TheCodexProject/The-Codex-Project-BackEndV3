@@ -33,35 +33,30 @@ public class UpdateOrganizationEndpoint(ICommandDispatcher dispatcher) : Endpoin
 
     public record UpdateOrganizationRequest(string? Name, List<string>? MembersToAdd, List<string>? MembersToRemove);
 
-    private DTOs.OrganizationDTO Transform(UpdateOrganizationCommand cmd)
+    private OrganizationDTO Transform(UpdateOrganizationCommand cmd)
     {
-        if (cmd.Organization is null)
-        {
-            return new DTOs.OrganizationDTO("","", new UserDTO("", "", "", "",[],[]), new List<UserDTO>());
-        }
+        // * Extract the organization
+        var org = cmd.Organization;
 
-        // Handle the possibility of null Owner or Members
-        var owner = cmd.Organization.Owner != null
-            ? new UserDTO(
-                cmd.Organization.Owner.Id.ToString(),
-                cmd.Organization.Owner.FirstName,
-                cmd.Organization.Owner.LastName,
-                cmd.Organization.Owner.Email,
-                cmd.Organization.Owner.OwnedOrganizations != null ?
-                    cmd.Organization.Owner.OwnedOrganizations.Select(x => x.Id.ToString()).ToList()
-                    : [],
-                cmd.Organization.Owner.Memberships != null ?
-                    cmd.Organization.Owner.Memberships.Select(x => x.Id.ToString()).ToList()
-                    : []
-            )
-            : new UserDTO("", "", "", "",[],[]);
+        // * Transform the Owner
+        var owner = new UserDTO(
+            org.Owner.Id.ToString(),
+            org.Owner.FirstName,
+            org.Owner.LastName,
+            org.Owner.Email,
+            org.Owner.OwnedOrganizations.Select(x => x.Id.ToString()).ToList(),
+            org.Owner.Memberships.Select(x => x.Id.ToString()).ToList()
+        );
 
-        var members = cmd.Organization.Members != null
-            ? cmd.Organization.Members.Select(x => new UserDTO(x.Id.ToString(), x.FirstName, x.LastName, x.Email,[],[])).ToList()
-            : new List<UserDTO>();
+        // * Transform the Members
+        var members = org.Members.Select(x => x.Id.ToString()).ToList();
 
-        var dto = new DTOs.OrganizationDTO(cmd.Organization.Id.ToString(), cmd.Organization.Name, owner, members);
-
-        return dto;
+        // * Make the DTO
+        return new OrganizationDTO(
+            org.Id.ToString(),
+            org.Name,
+            owner,
+            members
+        );
     }
 }
