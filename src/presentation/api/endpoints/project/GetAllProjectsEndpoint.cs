@@ -28,7 +28,7 @@ public class GetAllProjectsEndpoint(ICommandDispatcher dispatcher) : EndpointBas
             : Ok(TransformList(cmd));
     }
 
-    private List<DTOs.ProjectDTO> TransformList(GetAllProjectsCommand cmd)
+    private List<ProjectDTO> TransformList(GetAllProjectsCommand cmd)
     {
         // * Extract the projects from the command
         var projects = cmd.Projects;
@@ -38,13 +38,13 @@ public class GetAllProjectsEndpoint(ICommandDispatcher dispatcher) : EndpointBas
         return projects.Select(TransformSingle).ToList();
     }
 
-    private DTOs.ProjectDTO TransformSingle(Project project)
+    private ProjectDTO TransformSingle(Project project)
     {
         // * Extract the project from the command
 
         // * Create the DTO
-        return new DTOs.ProjectDTO(project.Id.ToString(), project.Title, project.Description, project.Status.ToString(), project.Priority.ToString(), [project.Start.ToString("yyyy-MM-dd HH:mm:ss"), project.End.ToString("yyyy-MM-dd HH:mm:ss")
-        ], project.Workspace.Title);
+        return new ProjectDTO(project.Id.ToString(), project.Title, project.Workspace.Title, project.Description, project.Status.ToString(), project.Priority.ToString(), [project.Start.ToString("yyyy-MM-dd HH:mm:ss"), project.End.ToString("yyyy-MM-dd HH:mm:ss")
+        ]);
     }
     
 }
