@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.organization;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -26,10 +27,35 @@ public class CreateOrganizationEndpoint(ICommandDispatcher dispatcher) : Endpoin
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors)
-            : Ok(new CreateOrganizationResponse(cmd.Value.Id.ToString()));
+            : Ok(Transform(cmd));
+    }
+
+    private OrganizationDTO Transform(CreateOrganizationCommand cmd)
+    {
+        // * Extract the organization
+        var org = cmd.Organization;
+
+        // * Transform the Owner
+        var owner = new UserDTO(
+            org.Owner.Id.ToString(),
+            org.Owner.FirstName,
+            org.Owner.LastName,
+            org.Owner.Email,
+            org.Owner.OwnedOrganizations.Select(x => x.Id.ToString()).ToList(),
+            org.Owner.Memberships.Select(x => x.Id.ToString()).ToList()
+            );
+
+        // * Transform the Members
+        var members = org.Members.Select(x => x.Id.ToString()).ToList();
+
+        // * Make the DTO
+        return new OrganizationDTO(
+            org.Id.ToString(),
+            org.Name,
+            owner,
+            members
+        );
     }
 }
 
 public record CreateOrganizationRequest(string Name, string OwnerId);
-
-public record CreateOrganizationResponse(string Id);
