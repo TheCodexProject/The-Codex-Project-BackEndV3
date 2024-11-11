@@ -6,10 +6,10 @@ namespace application.appEntry.commands.project;
 
 public class CreateProjectCommand
 {
-    public Guid Id { get; set; }
-
     public Guid WorkspaceId { get; set; }
     public string Title { get; set; }
+
+    public Project? Project { get; set; } = null;
 
     private CreateProjectCommand(Guid workspaceId, string title)
     {
