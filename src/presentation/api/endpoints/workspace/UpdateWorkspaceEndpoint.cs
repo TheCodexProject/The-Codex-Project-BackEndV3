@@ -31,7 +31,7 @@ public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBa
             : Ok(Transform(cmd));
     }
 
-    private DTOs.WorkspaceDTO Transform(UpdateWorkspaceCommand cmd)
+    private WorkspaceDTO Transform(UpdateWorkspaceCommand cmd)
     {
         // * Extract the workspace from the command
         var workspace = cmd.Workspace;
@@ -40,7 +40,7 @@ public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBa
         var contacts = workspace.Contacts.Select(contact => new UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email, [], [])).ToList();
 
         // * Create the DTO
-        return new DTOs.WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
+        return new WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
     }
 }
 
