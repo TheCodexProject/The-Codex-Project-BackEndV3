@@ -5,10 +5,13 @@ namespace application.appEntry.commands.user;
 
 public class CreateUserCommand
 {
-    public Guid Id { get; set; }
+    // NOTE: Given information
     public string FirstName { get; }
     public string LastName { get; }
     public string Email { get; }
+
+    // NOTE: Result information
+    public User? User { get; set; } = null;
 
     private CreateUserCommand(string firstName, string lastName, string email)
     {
