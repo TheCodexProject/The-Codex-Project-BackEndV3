@@ -40,7 +40,7 @@ public class GetAllWorkspacesEndpoint(ICommandDispatcher dispatcher) : EndpointB
     private DTOs.WorkspaceDTO TransformSingle(Workspace workspace)
     {
         // * Extract the contacts from the workspace
-        var contacts = workspace.Contacts.Select(contact => new DTOs.UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email)).ToList();
+        var contacts = workspace.Contacts.Select(contact => new UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email,[],[])).ToList();
 
         // * Create the DTO
         return new DTOs.WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
