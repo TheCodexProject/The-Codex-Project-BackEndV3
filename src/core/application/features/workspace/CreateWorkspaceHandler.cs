@@ -32,8 +32,8 @@ public class CreateWorkspaceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cr
         if (await unitOfWork.SaveChangesAsync() == 0)
             return Result.Failure(new FailedOperationException("Failed to save the workspace to the database."));
 
-        // * Set the workspace's ID to the command
-        command.Id = workspace.Value.Id;
+        // * Set the workspace on the command
+        command.Workspace = workspace.Value;
 
         // * Return the success result
         return Result.Success();
