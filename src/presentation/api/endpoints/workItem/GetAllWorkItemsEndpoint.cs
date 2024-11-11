@@ -27,7 +27,7 @@ public class GetAllWorkItemsEndpoint(ICommandDispatcher dispatcher) : EndpointBa
             : Ok(TransformList(cmd));
     }
 
-    private List<DTOs.WorkItemDTO> TransformList(GetAllWorkItemsCommand cmd)
+    private List<WorkItemDTO> TransformList(GetAllWorkItemsCommand cmd)
     {
         // * Extract the workItems from the command
         var workItems = cmd.WorkItems;
@@ -37,10 +37,19 @@ public class GetAllWorkItemsEndpoint(ICommandDispatcher dispatcher) : EndpointBa
         return workItems.Select(TransformSingle).ToList();
     }
 
-    private DTOs.WorkItemDTO TransformSingle(WorkItem workItem)
+    private WorkItemDTO TransformSingle(WorkItem workItem)
     {
         // * Create the DTO
-        return new DTOs.WorkItemDTO(workItem.Id.ToString(), workItem.Project.Title.ToString(), workItem.Title, workItem.Description, workItem.Status.ToString(), workItem.Priority.ToString(), workItem.Type.ToString(), workItem.AssignedTo?.Email ?? "Unassigned");
+        return new WorkItemDTO(
+            workItem.Id.ToString(),
+            workItem.Project.Title,
+            workItem.Title,
+            workItem.Description,
+            workItem.Status.ToString(),
+            workItem.Priority.ToString(),
+            workItem.Type.ToString(),
+            workItem.AssignedTo?.Email ?? "Unassigned"
+            );
     }
     
 }

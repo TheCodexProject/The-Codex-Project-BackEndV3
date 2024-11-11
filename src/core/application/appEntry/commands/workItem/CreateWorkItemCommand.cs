@@ -6,10 +6,10 @@ namespace application.appEntry.commands.workItem;
 
 public class CreateWorkItemCommand
 {
-    public Guid Id { get; set; }
-
     public Guid ProjectId { get; set; }
     public string Title { get; set; }
+
+    public WorkItem? WorkItem { get; set; } = null;
 
     private CreateWorkItemCommand(Guid projectId, string title)
     {
@@ -48,6 +48,4 @@ public class CreateWorkItemCommand
             ? Result.Failure(exceptions.ToArray()) // * Yes: Return the exceptions
             : Result.Success(); // * No: Return success
     }
-
-
 }

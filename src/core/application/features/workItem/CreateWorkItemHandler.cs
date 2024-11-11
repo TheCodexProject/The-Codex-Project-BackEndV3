@@ -32,8 +32,8 @@ public class CreateWorkItemHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cre
         if (await unitOfWork.SaveChangesAsync() == 0)
             return Result.Failure(new FailedOperationException("Failed to save the work item to the database."));
 
-        // * Set the work item's ID to the command
-        command.Id = workItem.Value.Id;
+        // * Set the work item on the command
+        command.WorkItem = workItem.Value;
 
         // * Return the success result
         return Result.Success();
