@@ -35,10 +35,18 @@ public class UpdateWorkItemEndpoint(ICommandDispatcher dispatcher) : EndpointBas
         var workItem = cmd.WorkItem;
 
         // * Create the DTO
-        return new UpdatedWorkItemDTO(workItem.Id.ToString(), workItem.Project.Title.ToString(), workItem.Title, workItem.Description, workItem.Status.ToString(), workItem.Priority.ToString(), workItem.Type.ToString(), workItem.AssignedTo?.Email ?? "No assignee", workItem.Subitems?.Select(subItem => subItem.Id.ToString()).ToList() ?? new List<string>()
+        return new UpdatedWorkItemDTO(
+            workItem.Id.ToString(),
+            workItem.Project.Title,
+            workItem.Title,
+            workItem.Description,
+            workItem.Status.ToString(),
+            workItem.Priority.ToString(),
+            workItem.Type.ToString(),
+            workItem.AssignedTo?.Email ?? "No assignee",
+            workItem.Subitems?.Select(subItem => subItem.Id.ToString()).ToList() ?? []
         );
     }
-
     private record UpdatedWorkItemDTO(string Id, string Project, string Title, string Description, string Status, string Priority, string Type, string AssignedTo, List<string> SubItems);
 }
 

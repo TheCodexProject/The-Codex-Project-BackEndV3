@@ -1,4 +1,5 @@
 ﻿using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.workItem;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,24 @@ public class CreateWorkItemEndpoint(ICommandDispatcher commandDispatcher) : Endp
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors)
-            : Ok(new CreateWorkItemResponse(cmd.Value.Id.ToString()));
+            : Ok(Transform(cmd));
+    }
+
+    private WorkItemDTO Transform(CreateWorkItemCommand cmd)
+    {
+        // * Extract the workItem from the command
+        var workItem = cmd.WorkItem;
+
+        // * Create the DTO
+        return new WorkItemDTO(
+            workItem.Id.ToString(),
+            workItem.Project.Title,
+            workItem.Title,
+            workItem.Description,
+            workItem.Status.ToString(),
+            workItem.Priority.ToString(),
+            workItem.Type.ToString(),
+            workItem.AssignedTo?.Email ?? "Unassigned");
     }
 }
 
