@@ -27,7 +27,7 @@ public class GetAllWorkspacesEndpoint(ICommandDispatcher dispatcher) : EndpointB
             : Ok(TransformList(cmd));
     }
 
-    private List<DTOs.WorkspaceDTO> TransformList(GetAllWorkspacesCommand cmd)
+    private List<WorkspaceDTO> TransformList(GetAllWorkspacesCommand cmd)
     {
         // * Extract the workspaces from the command
         var workspaces = cmd.Workspaces;
@@ -37,13 +37,13 @@ public class GetAllWorkspacesEndpoint(ICommandDispatcher dispatcher) : EndpointB
         return workspaces.Select(TransformSingle).ToList();
     }
 
-    private DTOs.WorkspaceDTO TransformSingle(Workspace workspace)
+    private WorkspaceDTO TransformSingle(Workspace workspace)
     {
         // * Extract the contacts from the workspace
         var contacts = workspace.Contacts.Select(contact => new UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email,[],[])).ToList();
 
         // * Create the DTO
-        return new DTOs.WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
+        return new WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
     }
     
 }
