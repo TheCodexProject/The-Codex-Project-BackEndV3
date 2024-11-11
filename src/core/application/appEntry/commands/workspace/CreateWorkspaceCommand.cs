@@ -6,10 +6,10 @@ namespace application.appEntry.commands.workspace;
 
 public class CreateWorkspaceCommand
 {
-    public Guid Id { get; set; }
-
     public Guid OrganizationId { get; }
     public string Title { get;  }
+
+    public Workspace? Workspace { get; set; } = null;
 
     private CreateWorkspaceCommand(Guid organizationId, string title)
     {

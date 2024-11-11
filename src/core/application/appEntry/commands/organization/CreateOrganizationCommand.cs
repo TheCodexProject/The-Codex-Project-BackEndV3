@@ -6,10 +6,12 @@ namespace application.appEntry.commands.organization;
 
 public class CreateOrganizationCommand
 {
-    public Guid Id { get; set; }
-
+    // NOTE: Given information
     public string Name { get; }
     public Guid OwnerId { get; }
+
+    // NOTE: Result information
+    public Organization? Organization { get; set; } = null;
 
     private CreateOrganizationCommand(string name, Guid ownerId)
     {
