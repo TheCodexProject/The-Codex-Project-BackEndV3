@@ -32,7 +32,7 @@ public class GetAllWorkspaceResourcesEndpoint(ICommandDispatcher dispatcher) : E
             : Ok(TransformList(cmd)); // * Return the resources
     }
 
-    private List<DTOs.ResourceDTO> TransformList(GetAllResourcesCommand cmd)
+    private List<ResourceDTO> TransformList(GetAllResourcesCommand cmd)
     {
         // * Extract the projects from the command
         var resources = cmd.Resources;
@@ -42,10 +42,10 @@ public class GetAllWorkspaceResourcesEndpoint(ICommandDispatcher dispatcher) : E
         return resources.Select(TransformSingle).ToList();
     }
 
-    private DTOs.ResourceDTO TransformSingle(Resource resource)
+    private ResourceDTO TransformSingle(Resource resource)
     {
         // * Create the DTO
-        return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
+        return new ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
     }
     
 }
