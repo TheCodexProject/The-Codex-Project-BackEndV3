@@ -47,8 +47,14 @@ public class Organization : IResourceOwner
     /// </summary>
     public List<User> Members { get; private set; } = new List<User>();
 
+    /// <summary>
+    /// Workspaces within the organization.
+    /// </summary>
     public List<Workspace> Workspaces { get; private set; } = new List<Workspace>();
-    
+
+    /// <summary>
+    /// Resources on the organization-level.
+    /// </summary>
     public List<Resource> Resources { get; private set; } = new List<Resource>();
     
     // # CONSTRUCTORS #
@@ -93,6 +99,12 @@ public class Organization : IResourceOwner
 
     // # METHODS #
 
+    /// <summary>
+    /// Updates the name of the organization.
+    /// </summary>
+    /// <param name="name">The new name</param>
+    /// <returns>A <see cref="Result"/> indicating if the update was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result UpdateName(string name)
     {
         // ! Validate the name.
@@ -109,6 +121,12 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
+    /// <summary>
+    /// Adds a member to the organization.
+    /// </summary>
+    /// <param name="member">The member to add.</param>
+    /// <returns>A <see cref="Result"/> indicating if the addition was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result AddMember(User member)
     {
         // ! Validate the member.
@@ -126,6 +144,12 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
+    /// <summary>
+    /// Removes a member from the organization.
+    /// </summary>
+    /// <param name="member">The member to remove.</param>
+    /// <returns>A <see cref="Result"/> indicating if the removal was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result RemoveMember(User member)
     {
         // ! Validate the member.
@@ -143,6 +167,14 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
+    /// <summary>
+    /// Adds a workspace from another organization to this organization.
+    /// This is useful for when you want to move a workspace between organizations.
+    /// (e.g., a user leaves an organization and wants to take their workspace with them or an acquisition)
+    /// </summary>
+    /// <param name="workspace">The workspace to add.</param>
+    /// <returns>A <see cref="Result"/> indicating if the addition was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result AddWorkspace(Workspace workspace)
     {
         // ! Validate the workspace.
@@ -159,6 +191,13 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
+    /// <summary>
+    /// Removes a workspace from the organization.
+    /// This is decouples the workspace from the organization without deleting the workspace itself.
+    /// </summary>
+    /// <param name="workspace">The workspace to remove.</param>
+    /// <returns>A <see cref="Result"/> indicating if the removal was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result RemoveWorkspace(Workspace workspace)
     {
         // ! Validate the workspace.
@@ -175,12 +214,18 @@ public class Organization : IResourceOwner
         return Result.Success();
     }
 
+    /// <summary>
+    /// Adds a resource for use within the organization.
+    /// </summary>
+    /// <param name="resource">The resource to add.</param>
+    /// <returns>A <see cref="Result"/> indicating if the addition was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result AddResource(Resource resource)
     {
         // * Add the resource to the organization.
         var addValidationResult = OrganizationPropertyValidator.ValidateAddResource(resource, Resources);
         
-        // ? Is the add validation a failure?
+        // ? Is the result a failure?
         if (addValidationResult.IsFailure)
         {
             // ! Return the failure.
@@ -190,7 +235,13 @@ public class Organization : IResourceOwner
         Resources.Add(resource);
         return Result.Success();
     }
-    
+
+    /// <summary>
+    /// Removes a resource from the organization.
+    /// </summary>
+    /// <param name="resource">The resource to remove.</param>
+    /// <returns>A <see cref="Result"/> indicating if the removal was successful or a failure.
+    /// If it is a failure, there will be a list of exceptions to check.</returns>
     public Result RemoveResource(Resource resource)
     {
         // ! Validate the resource.
