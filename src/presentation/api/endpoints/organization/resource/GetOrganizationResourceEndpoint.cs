@@ -31,12 +31,12 @@ public class GetOrganizationResourceEndpoint(ICommandDispatcher dispatcher) : En
             : Ok(Transform(command)); // * Return the resource
     }
 
-    private DTOs.ResourceDTO Transform(GetResourceCommand command)
+    private ResourceDTO Transform(GetResourceCommand command)
     {
         // * Extract the resource from the command
         var resource = command.Resource;
 
         // * Create the DTO
-        return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
+        return new ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
     }
 }
