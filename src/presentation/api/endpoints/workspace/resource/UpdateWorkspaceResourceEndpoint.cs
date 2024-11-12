@@ -33,13 +33,13 @@ public class UpdateWorkspaceResourceEndpoint(ICommandDispatcher dispatcher) : En
 
     public record UpdateWorkspaceResourceRequest(string? Title, string? Url, string? Description, string? Type);
 
-    private DTOs.ResourceDTO Transform(UpdateResourceCommand command)
+    private ResourceDTO Transform(UpdateResourceCommand command)
     {
         // * Extract the resource from the command
         var resource = command.Resource;
 
         // * Create the DTO
-        return new DTOs.ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
+        return new ResourceDTO(resource.Id.ToString(), resource.Title, string.IsNullOrEmpty(resource.Description)? "No description..." : resource.Description,  resource.Url, resource.Type.ToString());
     }
     
 }
