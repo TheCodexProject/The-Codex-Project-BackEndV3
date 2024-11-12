@@ -7,14 +7,14 @@ namespace application.appEntry.commands.resource;
 
 public class CreateResourceCommand
 {
-    public Guid Id { get; set; }
-
+    // NOTE: Given information
     public string Title { get; set; }
     public string Url { get; set; }
-
     public Guid OwnerId { get; set; }
-
     public ResourceLevel Level { get; set; }
+
+    // NOTE: Result information
+    public Resource? Resource { get; set; } = null;
 
     private CreateResourceCommand(string title, string url, Guid ownerId, ResourceLevel level)
     {

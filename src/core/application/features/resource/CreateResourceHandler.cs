@@ -48,7 +48,7 @@ public class CreateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cre
             return Result.Failure(new FailedOperationException("Failed to save the resource to the database."));
 
         // * Return the success result
-        command.Id = resource.Value.Id;
+        command.Resource = resource.Value;
         return Result.Success();
     }
 
@@ -95,29 +95,4 @@ public class CreateResourceHandler(IUnitOfWork unitOfWork) : ICommandHandler<Cre
 
         return Result<IResourceOwner>.Success(owner);
     }
-
-    private Result UpdateOwnerAsync(IResourceOwner owner)
-    {
-        // Update the owner in the database
-        switch (owner)
-        {
-            case Organization organization:
-                unitOfWork.Organizations.Update(organization);
-                break;
-
-            case Workspace workspace:
-                unitOfWork.Workspaces.Update(workspace);
-                break;
-
-            case Project project:
-                unitOfWork.Projects.Update(project);
-                break;
-
-            default:
-                return Result.Failure(new NotFoundException("The owner of the resource could not be found."));
-        }
-
-        return Result.Success();
-    }
-
 }
