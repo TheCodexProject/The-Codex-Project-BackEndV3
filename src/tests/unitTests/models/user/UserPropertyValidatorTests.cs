@@ -176,9 +176,12 @@ public class UserPropertyValidatorTests
 
     // # 2: Email should be a valid email address
     [Theory]
-    [TestCase("john.doe")]
-    [TestCase("john.doe@")]
-    [TestCase("john.doe@com")]
+    [TestCase("invalid email")]
+    [TestCase("invalid.email")]
+    [TestCase("invalid@mail")]
+    [TestCase("invalid@mail.")]
+    [TestCase("invalid@mail.c")]
+    [TestCase("invalid@mail.c.")]
     public void Invalid_Email_Should_Be_Invalid(string value)
     {
         // Act
@@ -187,6 +190,73 @@ public class UserPropertyValidatorTests
         // Assert
         Assert.That(result.IsFailure, Is.True);
         Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 3: Email cannot contain any special characters or have missing parts
+    [Theory]
+    [TestCase("missing_at_symbol.com")]  // Missing @ symbol
+    [TestCase("@domain.com")]  // Empty local part
+    [TestCase("localPart@")]  // Empty domain part
+    [TestCase("local@part@domain.com")]  // Multiple @ symbols
+    [TestCase("special&character@domain.com")]  // Invalid special character in local part
+    [TestCase("localpart@dom#ain.com")]  // Special character in domain part
+    [TestCase("space in a local part@domain.com")]
+    public void Email_With_Invalid_Parts_Should_Be_Invalid(string value)
+    {
+        // Act
+        var result = UserPropertyValidator.ValidateEmail(value);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 4: Email cannot exceed length limits (min 5, max 254)
+    [Theory]
+    [TestCase("this_is_way_too_long_for_gmail_to_accept_as_a_local_part_of_an_email@domain.com", true)]  // Local part too long
+    [TestCase("validlocalpart@domainwithaveryveryveryveryveryveryveryveryveryveryverylongsegment.com", true)]  // Domain part too long
+    [TestCase("valid.email@domain.com", false)]  // Valid email
+    [TestCase("a@b.com", false)]  // Short but valid email
+    public void Email_With_Invalid_Length_Should_Be_Invalid(string value, bool expected)
+    {
+        // Act
+        var result = UserPropertyValidator.ValidateEmail(value);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.EqualTo(expected));
+        Assert.That(result.Errors.Count, Is.EqualTo(expected ? 1 : 0));
+    }
+
+    // # 5: Email cannot have wrong dot (.) placement
+    [Theory]
+    [TestCase("local..part@domain.com", true)] // Consecutive dots in local part
+    [TestCase("localpart@domain..com", true)] // Consecutive dots in domain part
+    [TestCase(".localpart@domain.com", true)] // Local part starts with a dot
+    [TestCase("localPart.@domain.com", true)] // Local part ends with a dot
+    [TestCase("valid.email@domain.com", false)] // Valid email with proper dots
+    public void Email_With_Invalid_Dot_Placement_Should_Be_Invalid(string value, bool expected)
+    {
+        // Act
+        var result = UserPropertyValidator.ValidateEmail(value);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.EqualTo(expected));
+        Assert.That(result.Errors.Count, Is.EqualTo(expected ? 1 : 0));
+    }
+
+    // # 6: Email needs a domain that is a valid TLD
+    [Theory]
+    [TestCase("localpart@domain.c", true)] // TLD too short
+    [TestCase("localpart@domain.com", false)] // Valid TLD
+    [TestCase("localpart@short.co", false)] // Valid short TLD
+    public void Email_With_Invalid_TLD_Should_Be_Invalid(string value, bool expected)
+    {
+        // Act
+        var result = UserPropertyValidator.ValidateEmail(value);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.EqualTo(expected));
+        Assert.That(result.Errors.Count, Is.EqualTo(expected ? 1 : 0));
     }
 
 
