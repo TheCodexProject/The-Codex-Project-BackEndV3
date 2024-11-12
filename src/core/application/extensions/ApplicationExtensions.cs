@@ -66,6 +66,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllWorkItemsCommand>, GetAllWorkItemsHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkItemCommand>,UpdateWorkItemHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkItemCommand>, DeleteWorkItemHandler>();
+        services.AddScoped<ICommandHandler<GetProjectWorkItemsCommand>, GetProjectWorkItemsHandler>();
 
         // * ----------------- *
         // * Resource Handlers *
