@@ -7,13 +7,13 @@ namespace application.appEntry.commands.projectActivity;
 
 public class CreateProjectActivityCommand
 {
-    // NOTE: Result information
-    public Guid Id { get; set; }
-
     // NOTE: Given information
     public Guid ProjectId { get; }
     public string Title { get; }
     public ProjectActivityType Type { get; }
+
+    // NOTE: Result information
+    public ProjectActivity? ProjectActivity { get; set; } = null;
 
     private CreateProjectActivityCommand(Guid projectId, string title, ProjectActivityType type)
     {
