@@ -28,7 +28,7 @@ public class GetAllMilestonesEndpoint(ICommandDispatcher dispatcher) : EndpointB
             : Ok(TransformList(command)); // * Return the success
     }
 
-    private List<DTOs.ActivityDTO> TransformList(GetAllProjectActivitiesCommand command)
+    private List<ActivityDTO> TransformList(GetAllProjectActivitiesCommand command)
     {
         // * Extract the project activities from the command
         var projectActivities = command.ProjectActivities;
@@ -38,10 +38,10 @@ public class GetAllMilestonesEndpoint(ICommandDispatcher dispatcher) : EndpointB
         return projectActivities.Select(Transform).ToList();
     }
 
-    private DTOs.ActivityDTO Transform(ProjectActivity projectActivity)
+    private ActivityDTO Transform(ProjectActivity projectActivity)
     {
         // * Create the DTO
-        return new DTOs.ActivityDTO(
+        return new ActivityDTO(
             projectActivity.Id.ToString(),
             projectActivity.Project.Id.ToString(),
             projectActivity.Title,

@@ -31,13 +31,17 @@ public class GetMilestoneEndpoint(ICommandDispatcher dispatcher) : EndpointBase
             : Ok(Transform(command)); // * Return the success
     }
 
-    private DTOs.ActivityDTO Transform(GetProjectActivityCommand command)
+    private static ActivityDTO Transform(GetProjectActivityCommand command)
     {
         // * Extract the project activity from the command
         var projectActivity = command.ProjectActivity;
 
+        // ? Is the project activity null?
+        if (projectActivity is null)
+            return new ActivityDTO("", "", "", "", []);
+
         // * Create the DTO
-        return new DTOs.ActivityDTO(
+        return new ActivityDTO(
             projectActivity.Id.ToString(),
             projectActivity.Project.Id.ToString(),
             projectActivity.Title,

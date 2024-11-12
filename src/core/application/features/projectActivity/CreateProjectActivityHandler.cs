@@ -57,7 +57,7 @@ public class CreateProjectActivityHandler(IUnitOfWork unitOfWork) : ICommandHand
             return Result.Failure(new FailedOperationException("Failed to save the activity to the database."));
 
         // * Return the success result
-        command.Id = activity.Id;
+        command.ProjectActivity = activity;
         return Result.Success();
     }
 }

@@ -34,13 +34,17 @@ public class UpdateIterationEndpoint(ICommandDispatcher dispatcher) : EndpointBa
 
     public record UpdateIterationRequest(string? Title, string? Description, List<string>? ItemsToAdd, List<string>? ItemsToRemove);
 
-    private DTOs.ActivityDTO Transform(UpdateProjectActivityCommand command)
+    private ActivityDTO Transform(UpdateProjectActivityCommand command)
     {
         // * Extract the project activity from the command
         var projectActivity = command.ProjectActivity;
 
+        // ? Is the project activity null?
+        if (projectActivity is null)
+            return new ActivityDTO("", "", "", "", []);
+
         // * Create the DTO
-        return new DTOs.ActivityDTO(
+        return new ActivityDTO(
             projectActivity.Id.ToString(),
             projectActivity.Project.Id.ToString(),
             projectActivity.Title,
