@@ -1,4 +1,5 @@
 using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.projectActivity;
 using application.appEntry.interfaces;
 using domain.models.projectActivity.value;
@@ -27,10 +28,27 @@ public class CreateIterationEndpoint(ICommandDispatcher dispatcher) : EndpointBa
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors) // ! Return the errors
-            : Ok(new CreateIterationResponse(command.Value.Id.ToString())); // * Return the ID of the created iteration
+            : Ok(Transform(command)); // * Return the ID of the created iteration
     }
 
     public record CreateIterationRequest(string Title);
 
-    private record CreateIterationResponse(string Id);
+    private static ActivityDTO Transform(CreateProjectActivityCommand command)
+    {
+        // * Extract the project activity from the command
+        var projectActivity = command.ProjectActivity;
+
+        // ? Is the project activity null?
+        if (projectActivity is null)
+            return new ActivityDTO("", "", "", "", []);
+
+        // * Create the DTO
+        return new ActivityDTO(
+            projectActivity.Id.ToString(),
+            projectActivity.Project.Id.ToString(),
+            projectActivity.Title,
+            projectActivity.Description ?? "No description...",
+            projectActivity.WorkItems.Select(item => item.Id.ToString()).ToList()
+        );
+    }
 }
