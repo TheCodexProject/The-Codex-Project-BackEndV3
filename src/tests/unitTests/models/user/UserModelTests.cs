@@ -1,3 +1,4 @@
+using domain.models.organization;
 using domain.models.user;
 
 namespace unitTests.models.user;
@@ -252,5 +253,123 @@ public class UserModelTests
             Assert.That(result.IsFailure, Is.True);
             Assert.That(user.Value.Email, Is.Not.EqualTo(email));
         });
+    }
+
+    // SECTION #2.4: Join Organization
+    private static List<Organization> GetOrganizations()
+    {
+        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
+
+        return
+        [
+            Organization.Create("Alpha", owner).Value,
+            Organization.Create("Beta", owner).Value,
+            Organization.Create("Gamma", owner).Value
+        ];
+    }
+
+
+    // # 1: A user should be able to join an organization
+    [Test]
+    public void User_Should_Be_Able_To_Join_Organization()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var organizations = GetOrganizations();
+
+        // Act
+        var result = user.Value.JoinOrganization(organizations[0]);
+        Assert.Multiple(() =>
+        {
+
+            // Assert
+            Assert.That(result.IsSuccess, Is.True);
+            Assert.That(user.Value.Memberships, Has.Count.EqualTo(1));
+        });
+    }
+
+    // # 2: A user should not be able to join an organization if they are already a member
+    [Test]
+    public void User_Should_Not_Be_Able_To_Join_Organization_If_Already_A_Member()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var organizations = GetOrganizations();
+
+        // Act
+        user.Value.JoinOrganization(organizations[0]);
+        var result = user.Value.JoinOrganization(organizations[0]);
+        Assert.Multiple(() =>
+        {
+
+            // Assert
+            Assert.That(result.IsFailure, Is.True);
+            Assert.That(user.Value.Memberships, Has.Count.EqualTo(1));
+        });
+    }
+
+    // # 3: A user should not be able to join an organization if the organization is null
+    [Test]
+    public void User_Should_Not_Be_Able_To_Join_Organization_If_Organization_Is_Null()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+
+        // Act
+        var result = user.Value.JoinOrganization(null!);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+    }
+
+    // SECTION #2.5: Leave Organization
+
+    // # 1: A user should be able to leave an organization
+    [Test]
+    public void User_Should_Be_Able_To_Leave_Organization()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var organizations = GetOrganizations();
+
+        // Act
+        user.Value.JoinOrganization(organizations[0]);
+        var result = user.Value.LeaveOrganization(organizations[0]);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.True);
+            Assert.That(user.Value.Memberships, Has.Count.EqualTo(0));
+        });
+    }
+
+    // # 2: A user should not be able to leave an organization if they are not a member
+    [Test]
+    public void User_Should_Not_Be_Able_To_Leave_Organization_If_Not_A_Member()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var organizations = GetOrganizations();
+
+        // Act
+        var result = user.Value.LeaveOrganization(organizations[0]);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+    }
+
+    // # 3: A user should not be able to leave an organization if the organization is null
+    [Test]
+    public void User_Should_Not_Be_Able_To_Leave_Organization_If_Organization_Is_Null()
+    {
+        // Arrange
+        var user = User.Create("John", "Doe", "johndoe@mail.com");
+
+        // Act
+        var result = user.Value.LeaveOrganization(null!);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
     }
 }

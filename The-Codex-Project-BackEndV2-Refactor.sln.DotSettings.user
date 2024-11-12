@@ -3,5 +3,6 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.user.UserPropertyValidatorTests&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.user.UserModelTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.organization.OrganizationPropertyValidatorTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

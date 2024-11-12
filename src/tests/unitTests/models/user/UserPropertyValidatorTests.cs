@@ -1,3 +1,4 @@
+using domain.models.organization;
 using domain.models.user;
 
 namespace unitTests.models.user;
@@ -194,12 +195,12 @@ public class UserPropertyValidatorTests
 
     // # 3: Email cannot contain any special characters or have missing parts
     [Theory]
-    [TestCase("missing_at_symbol.com")]  // Missing @ symbol
-    [TestCase("@domain.com")]  // Empty local part
-    [TestCase("localPart@")]  // Empty domain part
-    [TestCase("local@part@domain.com")]  // Multiple @ symbols
-    [TestCase("special&character@domain.com")]  // Invalid special character in local part
-    [TestCase("localpart@dom#ain.com")]  // Special character in domain part
+    [TestCase("missing_at_symbol.com")] // Missing @ symbol
+    [TestCase("@domain.com")] // Empty local part
+    [TestCase("localPart@")] // Empty domain part
+    [TestCase("local@part@domain.com")] // Multiple @ symbols
+    [TestCase("special&character@domain.com")] // Invalid special character in local part
+    [TestCase("localpart@dom#ain.com")] // Special character in domain part
     [TestCase("space in a local part@domain.com")]
     public void Email_With_Invalid_Parts_Should_Be_Invalid(string value)
     {
@@ -213,10 +214,12 @@ public class UserPropertyValidatorTests
 
     // # 4: Email cannot exceed length limits (min 5, max 254)
     [Theory]
-    [TestCase("this_is_way_too_long_for_gmail_to_accept_as_a_local_part_of_an_email@domain.com", true)]  // Local part too long
-    [TestCase("validlocalpart@domainwithaveryveryveryveryveryveryveryveryveryveryverylongsegment.com", true)]  // Domain part too long
-    [TestCase("valid.email@domain.com", false)]  // Valid email
-    [TestCase("a@b.com", false)]  // Short but valid email
+    [TestCase("this_is_way_too_long_for_gmail_to_accept_as_a_local_part_of_an_email@domain.com",
+        true)] // Local part too long
+    [TestCase("validlocalpart@domainwithaveryveryveryveryveryveryveryveryveryveryverylongsegment.com",
+        true)] // Domain part too long
+    [TestCase("valid.email@domain.com", false)] // Valid email
+    [TestCase("a@b.com", false)] // Short but valid email
     public void Email_With_Invalid_Length_Should_Be_Invalid(string value, bool expected)
     {
         // Act
@@ -259,6 +262,111 @@ public class UserPropertyValidatorTests
         Assert.That(result.Errors.Count, Is.EqualTo(expected ? 1 : 0));
     }
 
+    // SECTION #4: Add Organization
 
+    private static List<Organization> GetOrganizations()
+    {
+        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
 
+        return
+        [
+            Organization.Create("Alpha", owner).Value,
+            Organization.Create("Beta", owner).Value,
+            Organization.Create("Gamma", owner).Value
+        ];
+    }
+
+    // # 1: Organization is null.
+    [Test]
+    public void ValidateAddOrganization_NullOrganization_ShouldBeInvalid()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+
+        // Act
+        var result = UserPropertyValidator.ValidateAddOrganization(null, organizations);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 2: Organization is already in the list.
+    [Test]
+    public void ValidateAddOrganization_OrganizationAlreadyExists_ShouldBeInvalid()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+        var organization = organizations[0];
+
+        // Act
+        var result = UserPropertyValidator.ValidateAddOrganization(organization, organizations);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 3: Organization is not in the list.
+    [Test]
+    public void ValidateAddOrganization_AllowsAdditionOfNewOrganization()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+        var organization = Organization.Create("Delta", organizations[0].Owner).Value;
+
+        // Act
+        var result = UserPropertyValidator.ValidateAddOrganization(organization, organizations);
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.True);
+    }
+
+    // SECTION #5: Remove Organization
+
+    // # 1: Organization is null.
+    [Test]
+    public void ValidateRemoveOrganization_NullOrganization_ShouldBeInvalid()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+
+        // Act
+        var result = UserPropertyValidator.ValidateRemoveOrganization(null, organizations);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 2: Organization is not in the list.
+    [Test]
+    public void ValidateRemoveOrganization_OrganizationDoesNotExist_ShouldBeInvalid()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+        var organization = Organization.Create("Delta", organizations[0].Owner).Value;
+
+        // Act
+        var result = UserPropertyValidator.ValidateRemoveOrganization(organization, organizations);
+
+        // Assert
+        Assert.That(result.IsFailure, Is.True);
+        Assert.That(result.Errors.Count, Is.EqualTo(1));
+    }
+
+    // # 3: Organization is in the list.
+    [Test]
+    public void ValidateRemoveOrganization_AllowsDeletionOfExistingOrganization_Success()
+    {
+        // Arrange
+        var organizations = GetOrganizations();
+        var organization = organizations[0];
+
+        // Act
+        var result = UserPropertyValidator.ValidateRemoveOrganization(organization, organizations);
+
+        // Assert
+        Assert.That(result.IsSuccess, Is.True);
+    }
 }
