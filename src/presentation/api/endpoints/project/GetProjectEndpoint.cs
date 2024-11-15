@@ -10,7 +10,7 @@ namespace api.endpoints.project;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class GetProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("/projects/{id}")]
+    [HttpGet("projects/{id}")]
     [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> GetProject([FromRoute] string id)
     {

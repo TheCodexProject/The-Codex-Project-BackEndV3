@@ -10,7 +10,7 @@ namespace api.endpoints.project;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class CreateProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPost("/projects")]
+    [HttpPost("projects")]
     [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectRequest request)
     {
