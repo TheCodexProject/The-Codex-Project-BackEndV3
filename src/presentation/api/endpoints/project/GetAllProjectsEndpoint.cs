@@ -14,21 +14,47 @@ public class GetAllProjectsEndpoint(ICommandDispatcher dispatcher) : EndpointBas
 {
     [HttpGet("projects")]
     [SwaggerOperation(Tags = new[] { "Project" })]
-    public async Task<IActionResult> GetAllProjects()
+    public async Task<IActionResult> GetAllProjects([FromQuery] string? workspaceId)
     {
         // * Create the request
-        var cmd = GetAllProjectsCommand.Create();
+        if (string.IsNullOrWhiteSpace(workspaceId))
+        {
+            var cmd = GetAllProjectsCommand.Create();
 
-        // * Dispatch the command
-        var result = await dispatcher.DispatchAsync<GetAllProjectsCommand>(cmd.Value);
+            // * Dispatch the command
+            var result = await dispatcher.DispatchAsync<GetAllProjectsCommand>(cmd.Value);
 
-        // ? Did the execution fail?
-        return result.IsFailure
-            ? BadRequest(result.Errors)
-            : Ok(TransformList(cmd));
+            // ? Did the execution fail?
+            return result.IsFailure
+                ? BadRequest(result.Errors)
+                : Ok(TransformList(cmd));
+        }
+        else
+        {
+            var cmd = GetWorkspaceProjectsCommand.Create(workspaceId);
+
+            // * Dispatch the command
+            var result = await dispatcher.DispatchAsync<GetWorkspaceProjectsCommand>(cmd.Value);
+
+            // ? Did the execution fail?
+            return result.IsFailure
+                ? BadRequest(result.Errors)
+                : Ok(TransformList(cmd));
+        }
+
     }
 
     private List<ProjectDTO> TransformList(GetAllProjectsCommand cmd)
+    {
+        // * Extract the projects from the command
+        var projects = cmd.Projects;
+
+        // * Transform the projects into DTOs
+        // For each project, create a DTO
+        return projects.Select(TransformSingle).ToList();
+    }
+
+    private List<ProjectDTO> TransformList(GetWorkspaceProjectsCommand cmd)
     {
         // * Extract the projects from the command
         var projects = cmd.Projects;
