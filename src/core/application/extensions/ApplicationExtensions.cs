@@ -39,6 +39,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllOrganizationsCommand>, GetAllOrganizationsHandler>();
         services.AddScoped<ICommandHandler<UpdateOrganizationCommand>,UpdateOrganizationHandler>();
         services.AddScoped<ICommandHandler<DeleteOrganizationCommand>, DeleteOrganizationHandler>();
+        services.AddScoped<ICommandHandler<GetUserOrganizationsCommand>, GetUserOrganizationsHandler>();
 
         // * ------------------ *
         // * Workspace Handlers *

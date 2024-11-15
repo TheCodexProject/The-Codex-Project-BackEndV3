@@ -13,25 +13,51 @@ public class GetAllOrganizationsEndpoint(ICommandDispatcher dispatcher) : Endpoi
 {
     [HttpGet("organizations")]
     [SwaggerOperation(Tags = new[] { "Organization" })]
-    public async Task<IActionResult> GetAllOrganizations()
+    public async Task<IActionResult> GetAllOrganizations([FromQuery] string? userId)
     {
         // * Create the request
-        var cmd = GetAllOrganizationsCommand.Create();
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            var cmd = GetAllOrganizationsCommand.Create();
 
-        // ? Were there any validation errors?
-        if (cmd.IsFailure)
-            return BadRequest(cmd.Errors);
+            // ? Were there any validation errors?
+            if (cmd.IsFailure)
+                return BadRequest(cmd.Errors);
 
-        // * Dispatch the command
-        var result = await dispatcher.DispatchAsync<GetAllOrganizationsCommand>(cmd.Value);
+            // * Dispatch the command
+            var result = await dispatcher.DispatchAsync<GetAllOrganizationsCommand>(cmd.Value);
 
-        // ? Did the execution fail?
-        return result.IsFailure
-            ? BadRequest(result.Errors) // ! Return the errors
-            : Ok(TransformList(cmd)); // * Return the organizations
+            // ? Did the execution fail?
+            return result.IsFailure
+                ? BadRequest(result.Errors) // ! Return the errors
+                : Ok(TransformList(cmd)); // * Return the organizations
+        }
+        else
+        {
+            var cmd = GetUserOrganizationsCommand.Create(userId);
+
+            // * Dispatch the command
+            var result = await dispatcher.DispatchAsync<GetUserOrganizationsCommand>(cmd.Value);
+
+            // ? Did the execution fail?
+            return result.IsFailure
+                ? BadRequest(result.Errors) // ! Return the errors
+                : Ok(TransformList(cmd)); // * Return the organizations
+        }
+
     }
 
     private List<OrganizationDTO> TransformList(GetAllOrganizationsCommand cmd)
+    {
+        // * Extract the organizations from the command
+        var organizations = cmd.Organizations;
+
+        // * Transform the organizations into DTOs
+        // For each organization, create a DTO
+        return organizations.Select(TransformSingle).ToList();
+    }
+
+    private List<OrganizationDTO> TransformList(GetUserOrganizationsCommand cmd)
     {
         // * Extract the organizations from the command
         var organizations = cmd.Organizations;
