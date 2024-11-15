@@ -11,7 +11,7 @@ namespace api.endpoints.workspace;
 [ApiExplorerSettings(GroupName = "Workspaces")]
 public class GetAllWorkspacesEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("/workspaces")]
+    [HttpGet("workspaces")]
     [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> GetAllWorkspaces()
     {
