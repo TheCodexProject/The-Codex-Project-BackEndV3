@@ -16,10 +16,6 @@ public class GetAllProjectsHandler(IUnitOfWork unitOfWork) : ICommandHandler<Get
         // ? Were there any projects?
         var enumerable = projects.ToList();
 
-        if (enumerable.Count == 0)
-            // ! Return the error
-            return Result.Failure(new NotFoundException("No projects were found in the database."));
-
         // * Return the projects
         command.Projects = enumerable;
         return Result.Success();
