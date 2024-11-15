@@ -29,10 +29,6 @@ public class GetAllResourcesHandler(IUnitOfWork unitOfWork) : ICommandHandler<Ge
         // ? Were there any resources?
         var enumerable = resources.ToList();
 
-        if (enumerable.Count == 0)
-            // ! Return the error
-            return Result.Failure(new NotFoundException("No resources were found in the database."));
-
         // * Return the resources
         command.Resources = enumerable;
         return Result.Success();

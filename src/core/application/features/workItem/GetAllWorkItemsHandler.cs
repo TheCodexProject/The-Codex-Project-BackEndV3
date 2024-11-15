@@ -16,10 +16,6 @@ public class GetAllWorkItemsHandler(IUnitOfWork unitOfWork) : ICommandHandler<Ge
         // ? Were there any work items?
         var enumerable = workItems.ToList();
 
-        if (enumerable.Count == 0)
-            // ! Return the error
-            return Result.Failure(new NotFoundException("No work items were found in the database."));
-
         // * Return the work items
         command.WorkItems = enumerable;
         return Result.Success();
