@@ -19,10 +19,6 @@ public class GetProjectWorkItemsHandler(IUnitOfWork unitOfWork) : ICommandHandle
         // * Filter the work items by project ID
         var projectWorkItems = enumerable.Where(wi => wi.Project.Id == command.ProjectId).ToList();
 
-        if (projectWorkItems.Count == 0)
-            // ! Return the error
-            return Result.Failure(new NotFoundException("No work items were found in the database for the specified project."));
-
         // * Return the work items
         command.WorkItems = projectWorkItems;
         return Result.Success();

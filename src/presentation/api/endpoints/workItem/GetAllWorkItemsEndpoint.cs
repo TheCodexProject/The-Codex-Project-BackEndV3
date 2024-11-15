@@ -11,7 +11,7 @@ namespace api.endpoints.workItem;
 [ApiExplorerSettings(GroupName = "WorkItems")]
 public class GetAllWorkItemsEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("/workItems")]
+    [HttpGet("workItems")]
     [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> GetAllWorkItems([FromQuery] string? projectId)
     {
