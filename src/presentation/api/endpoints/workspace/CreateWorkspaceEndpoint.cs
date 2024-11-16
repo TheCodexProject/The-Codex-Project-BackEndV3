@@ -11,7 +11,7 @@ namespace api.endpoints.workspace;
 [ApiExplorerSettings(GroupName = "Workspaces")]
 public class CreateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPost("/workspaces")]
+    [HttpPost("workspaces")]
     [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> CreateWorkspace([FromBody] CreateWorkspaceRequest request)
     {

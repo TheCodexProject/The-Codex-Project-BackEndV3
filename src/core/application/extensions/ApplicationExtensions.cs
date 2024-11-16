@@ -48,6 +48,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllWorkspacesCommand>, GetAllWorkspacesHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkspaceCommand>,UpdateWorkspaceHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkspaceCommand>, DeleteWorkspaceHandler>();
+        services.AddScoped<ICommandHandler<GetOrganizationWorkspacesCommand>, GetOrganizationWorkspacesHandler>();
 
         // * ---------------- *
         // * Project Handlers *

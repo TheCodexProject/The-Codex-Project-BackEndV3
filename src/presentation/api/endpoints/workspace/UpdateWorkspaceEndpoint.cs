@@ -11,7 +11,7 @@ namespace api.endpoints.workspace;
 [ApiExplorerSettings(GroupName = "Workspaces")]
 public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("/workspaces/{id}")]
+    [HttpPut("workspaces/{id}")]
     [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> UpdateWorkspace([FromRoute] string id, [FromBody] UpdateWorkspaceRequest request)
     {
