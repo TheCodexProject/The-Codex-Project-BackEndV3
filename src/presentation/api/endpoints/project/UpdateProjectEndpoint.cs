@@ -10,7 +10,7 @@ namespace api.endpoints.project;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class UpdateProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("/projects/{id}")]
+    [HttpPut("projects/{id}")]
     [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> UpdateProject([FromRoute] string id, [FromBody] UpdateProjectRequest request)
     {
