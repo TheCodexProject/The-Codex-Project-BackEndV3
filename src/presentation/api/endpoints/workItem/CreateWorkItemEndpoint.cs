@@ -10,7 +10,7 @@ namespace api.endpoints.workItem;
 [ApiExplorerSettings(GroupName = "WorkItems")]
 public class CreateWorkItemEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
-    [HttpPost("/workItems")]
+    [HttpPost("workItems")]
     [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> HandleAsync([FromBody] CreateWorkItemRequest request)
     {

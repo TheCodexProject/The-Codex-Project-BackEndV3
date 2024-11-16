@@ -9,7 +9,7 @@ namespace api.endpoints.workItem;
 [ApiExplorerSettings(GroupName = "WorkItems")]
 public class UpdateWorkItemEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("/workItems/{id}")]
+    [HttpPut("workItems/{id}")]
     [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> UpdateWorkItem([FromRoute] string id, [FromBody] UpdateWorkItemRequest request)
     {

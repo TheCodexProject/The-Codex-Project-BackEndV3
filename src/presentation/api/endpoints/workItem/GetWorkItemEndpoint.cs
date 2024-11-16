@@ -10,7 +10,7 @@ namespace api.endpoints.workItem;
 [ApiExplorerSettings(GroupName = "WorkItems")]
 public class GetWorkItemEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("/workItems/{id}")]
+    [HttpGet("workItems/{id}")]
     [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> GetWorkItem([FromRoute] string id)
     {
