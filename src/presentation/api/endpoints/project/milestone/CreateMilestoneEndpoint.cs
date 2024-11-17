@@ -11,7 +11,7 @@ namespace api.endpoints.project.milestone;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class CreateMilestoneEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPost("project/{projectId}/milestones")]
+    [HttpPost("projects/{projectId}/milestones")]
     [SwaggerOperation(Tags = new[] { "Project - Milestones" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromBody] CreateMilestoneRequest request)
     {

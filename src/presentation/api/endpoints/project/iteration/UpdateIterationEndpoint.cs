@@ -12,7 +12,7 @@ namespace api.endpoints.project.iteration;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class UpdateIterationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("project/{projectId}/iterations/{iterationId}")]
+    [HttpPut("projects/{projectId}/iterations/{iterationId}")]
     [SwaggerOperation(Tags = new[] { "Project - Iterations" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string iterationId, [FromBody] UpdateIterationRequest request)
     {

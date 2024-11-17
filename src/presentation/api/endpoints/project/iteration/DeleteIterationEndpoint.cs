@@ -10,7 +10,7 @@ namespace api.endpoints.project.iteration;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class DeleteIterationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpDelete("project/{projectId}/iterations/{iterationId}")]
+    [HttpDelete("projects/{projectId}/iterations/{iterationId}")]
     [SwaggerOperation(Tags = new [] { "Project - Iterations" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string iterationId)
     {

@@ -10,7 +10,7 @@ namespace api.endpoints.project.milestone;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class DeleteMilestoneEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpDelete("project/{projectId}/milestones/{milestoneId}")]
+    [HttpDelete("projects/{projectId}/milestones/{milestoneId}")]
     [SwaggerOperation(Tags = new [] { "Project - Milestones" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string milestoneId)
     {

@@ -11,7 +11,7 @@ namespace api.endpoints.project.iteration;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class GetIterationEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("project/{projectId}/iterations/{iterationId}")]
+    [HttpGet("projects/{projectId}/iterations/{iterationId}")]
     [SwaggerOperation(Tags = new[] { "Project - Iterations" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string iterationId)
     {

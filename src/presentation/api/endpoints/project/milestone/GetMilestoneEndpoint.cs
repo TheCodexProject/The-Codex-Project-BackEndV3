@@ -11,7 +11,7 @@ namespace api.endpoints.project.milestone;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class GetMilestoneEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("project/{projectId}/milestones/{milestoneId}")]
+    [HttpGet("projects/{projectId}/milestones/{milestoneId}")]
     [SwaggerOperation(Tags = new[] { "Project - Milestones" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string milestoneId)
     {

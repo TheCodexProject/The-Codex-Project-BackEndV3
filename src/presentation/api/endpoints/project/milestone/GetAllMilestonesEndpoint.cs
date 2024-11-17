@@ -12,7 +12,7 @@ namespace api.endpoints.project.milestone;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class GetAllMilestonesEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("project/{projectId}/milestones")]
+    [HttpGet("projects/{projectId}/milestones")]
     [SwaggerOperation(Tags = new[] { "Project - Milestones" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId)
     {
