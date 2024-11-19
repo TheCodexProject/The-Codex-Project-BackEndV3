@@ -12,7 +12,7 @@ namespace api.endpoints.project.iteration;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class GetAllIterationsEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("project/{projectId}/iterations")]
+    [HttpGet("projects/{projectId}/iterations")]
     [SwaggerOperation(Tags = new[] { "Project - Iterations" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId)
     {
