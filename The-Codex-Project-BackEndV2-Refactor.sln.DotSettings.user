@@ -1,15 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1dc3f86f_002Dca7c_002D42e5_002Dba07_002Df607115cfd80/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Empty_FirstName_Should_Be_Invalid" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.user.UserPropertyValidatorTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.user.UserModelTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.organization.OrganizationPropertyValidatorTests&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.organization.OrganizationModelTests.Organization_CreateOrganizationWithValidNameAndOwner_ShouldSucceed&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.organization.OrganizationModelTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ee43293a_002Ddde9_002D49e9_002D8d06_002D78d577d93c03/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="OrganizationModelTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
-  &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;NUnit3x::81B6A1B8-D5D4-4378-9550-07484C1EEBB2::net8.0::unitTests.models.organization.OrganizationModelTests&lt;/TestId&gt;&#xD;
-  &lt;/TestAncestor&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bfa1969b_002Df67a_002D49fd_002D8a6e_002D2f71241a9415/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;src&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\madsh\RiderProjects\The-Codex-Project-BackEndV3" Presentation="&amp;lt;src&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
