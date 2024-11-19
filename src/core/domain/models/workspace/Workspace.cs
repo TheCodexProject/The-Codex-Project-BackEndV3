@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using domain.interfaces;
 using domain.models.organization;
 using domain.models.project;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.user;
 using OperationResult;
 
@@ -9,7 +12,7 @@ namespace domain.models.workspace;
 /// <summary>
 /// Represents a workspace.
 /// </summary>
-public class Workspace
+public class Workspace : IResourceOwner
 {
     // # METADATA #
     [Key]
@@ -35,7 +38,7 @@ public class Workspace
 
     public List<Project> Projects { get; private set; } = new List<Project>();
 
-    // TODO: Projects, Resources
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
 
     // # CONSTRUCTORS #
 
@@ -144,4 +147,31 @@ public class Workspace
         return Result.Success();
     }
 
+    public Result AddResource(Resource resource)
+    {
+        // * Add the resource to the workspace.
+        var addValidationResult = WorkspacePropertyValidator.ValidateAddResource(resource, Resources);
+
+        // ? Is the add validation a failure?
+        if (addValidationResult.IsFailure)
+        {
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        }
+
+        Resources.Add(resource);
+        return Result.Success();
+    }
+    
+    public Result RemoveResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = WorkspacePropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Remove(resource);
+        return Result.Success();
+    }
 }

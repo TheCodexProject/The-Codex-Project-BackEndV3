@@ -32,8 +32,8 @@ public class CreateProjectHandler(IUnitOfWork unitOfWork) : ICommandHandler<Crea
         if (await unitOfWork.SaveChangesAsync() == 0)
             return Result.Failure(new FailedOperationException("Failed to save the project to the database."));
 
-        // * Set the project's ID to the command
-        command.Id = project.Value.Id;
+        // * Set the project on the command
+        command.Project = project.Value;
 
         // * Return the success result
         return Result.Success();

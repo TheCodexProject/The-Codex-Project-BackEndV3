@@ -1,5 +1,7 @@
 ﻿using domain.models.organization;
 using domain.models.project;
+using domain.models.projectActivity;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem;
 using domain.models.workspace;
@@ -16,11 +18,14 @@ public class LocalDbContext: DbContext
     public DbSet<Workspace> Workspaces { get; init; }
     public DbSet<Project> Projects { get; init; }
     public DbSet<WorkItem> WorkItems { get; init; }
+    public DbSet<Resource> Resources { get; init; }
+    public DbSet<ProjectActivity> ProjectActivities { get; init; }
 
     // # CONSTRUCTORS #
+    
+    public LocalDbContext() { }
     public LocalDbContext(DbContextOptions<LocalDbContext> options) : base(options) { }
-
-
+    
     // # CONFIGURATION #
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

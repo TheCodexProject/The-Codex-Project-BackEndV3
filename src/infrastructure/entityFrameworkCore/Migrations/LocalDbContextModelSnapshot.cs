@@ -134,6 +134,116 @@ namespace entityFrameworkCore.Migrations
                     b.ToTable("Projects");
                 });
 
+            modelBuilder.Entity("domain.models.projectActivity.ProjectActivity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProjectId1")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId1");
+
+                    b.ToTable("ProjectActivities");
+                });
+
+            modelBuilder.Entity("domain.models.resource.Resource", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("OrganizationId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("ProjectId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(75)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UpdatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("WorkItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("WorkspaceId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("WorkItemId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("Resources");
+                });
+
             modelBuilder.Entity("domain.models.user.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -312,6 +422,36 @@ namespace entityFrameworkCore.Migrations
                     b.Navigation("Workspace");
                 });
 
+            modelBuilder.Entity("domain.models.projectActivity.ProjectActivity", b =>
+                {
+                    b.HasOne("domain.models.project.Project", "Project")
+                        .WithMany("ProjectActivities")
+                        .HasForeignKey("ProjectId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("domain.models.resource.Resource", b =>
+                {
+                    b.HasOne("domain.models.organization.Organization", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("OrganizationId");
+
+                    b.HasOne("domain.models.project.Project", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("ProjectId");
+
+                    b.HasOne("domain.models.workItem.WorkItem", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("WorkItemId");
+
+                    b.HasOne("domain.models.workspace.Workspace", null)
+                        .WithMany("Resources")
+                        .HasForeignKey("WorkspaceId");
+                });
+
             modelBuilder.Entity("domain.models.workItem.WorkItem", b =>
                 {
                     b.HasOne("domain.models.user.User", "AssignedTo")
@@ -348,11 +488,17 @@ namespace entityFrameworkCore.Migrations
 
             modelBuilder.Entity("domain.models.organization.Organization", b =>
                 {
+                    b.Navigation("Resources");
+
                     b.Navigation("Workspaces");
                 });
 
             modelBuilder.Entity("domain.models.project.Project", b =>
                 {
+                    b.Navigation("ProjectActivities");
+
+                    b.Navigation("Resources");
+
                     b.Navigation("Tasks");
                 });
 
@@ -363,12 +509,16 @@ namespace entityFrameworkCore.Migrations
 
             modelBuilder.Entity("domain.models.workItem.WorkItem", b =>
                 {
+                    b.Navigation("Resources");
+
                     b.Navigation("Subitems");
                 });
 
             modelBuilder.Entity("domain.models.workspace.Workspace", b =>
                 {
                     b.Navigation("Projects");
+
+                    b.Navigation("Resources");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,8 @@
 ﻿using domain.interfaces;
 using domain.models.organization;
 using domain.models.project;
+using domain.models.projectActivity;
+using domain.models.resource;
 using domain.models.user;
 using domain.models.workItem;
 using domain.models.workspace;
@@ -13,7 +15,9 @@ public class UnitOfWork(
     IRepository<WorkItem> workItems,
     IRepository<User> users,
     IRepository<Project> projects,
-    IRepository<Organization> organizations)
+    IRepository<Organization> organizations,
+    IRepository<Resource> resources,
+    IRepository<ProjectActivity> projectActivities)
     : IUnitOfWork, IDisposable
 {
     #region Repostiories
@@ -23,6 +27,9 @@ public class UnitOfWork(
     public IRepository<Workspace> Workspaces { get; } = workspaces;
     public IRepository<Project> Projects { get; } = projects;
     public IRepository<WorkItem> WorkItems { get; } = workItems;
+    public IRepository<Resource> Resources { get; } = resources;
+
+    public IRepository<ProjectActivity> ProjectActivities { get; } = projectActivities;
 
     #endregion
 

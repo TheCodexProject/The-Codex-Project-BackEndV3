@@ -33,7 +33,7 @@ public class CreateOrganizationHandler(IUnitOfWork unitOfWork) : ICommandHandler
             return Result.Failure(new FailedOperationException("Failed to save the organization to the database."));
 
         // * Set the organization's ID to the command
-        command.Id = organization.Value.Id;
+        command.Organization = organization.Value;
 
         // * Return the success result
         return Result.Success();

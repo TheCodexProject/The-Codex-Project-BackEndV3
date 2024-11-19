@@ -1,5 +1,7 @@
 using application.appEntry.commands.organization;
 using application.appEntry.commands.project;
+using application.appEntry.commands.projectActivity;
+using application.appEntry.commands.resource;
 using application.appEntry.commands.user;
 using application.appEntry.commands.workItem;
 using application.appEntry.commands.workspace;
@@ -7,6 +9,8 @@ using application.appEntry.dispatcher;
 using application.appEntry.interfaces;
 using application.features.organization;
 using application.features.project;
+using application.features.projectActivity;
+using application.features.resource;
 using application.features.user;
 using application.features.workItem;
 using application.features.workspace;
@@ -35,6 +39,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllOrganizationsCommand>, GetAllOrganizationsHandler>();
         services.AddScoped<ICommandHandler<UpdateOrganizationCommand>,UpdateOrganizationHandler>();
         services.AddScoped<ICommandHandler<DeleteOrganizationCommand>, DeleteOrganizationHandler>();
+        services.AddScoped<ICommandHandler<GetUserOrganizationsCommand>, GetUserOrganizationsHandler>();
 
         // * ------------------ *
         // * Workspace Handlers *
@@ -44,6 +49,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllWorkspacesCommand>, GetAllWorkspacesHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkspaceCommand>,UpdateWorkspaceHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkspaceCommand>, DeleteWorkspaceHandler>();
+        services.AddScoped<ICommandHandler<GetOrganizationWorkspacesCommand>, GetOrganizationWorkspacesHandler>();
 
         // * ---------------- *
         // * Project Handlers *
@@ -53,16 +59,35 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllProjectsCommand>, GetAllProjectsHandler>();
         services.AddScoped<ICommandHandler<UpdateProjectCommand>,UpdateProjectHandler>();
         services.AddScoped<ICommandHandler<DeleteProjectCommand>, DeleteProjectHandler>();
+        services.AddScoped<ICommandHandler<GetWorkspaceProjectsCommand>, GetWorkspaceProjectsHandler>();
 
-        // * ---------------- *
+        // * ----------------- *
         // * WorkItem Handlers *
-        // * ---------------- *
+        // * ----------------- *
         services.AddScoped<ICommandHandler<CreateWorkItemCommand>,CreateWorkItemHandler>();
         services.AddScoped<ICommandHandler<GetWorkItemCommand>, GetWorkItemHandler>();
         services.AddScoped<ICommandHandler<GetAllWorkItemsCommand>, GetAllWorkItemsHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkItemCommand>,UpdateWorkItemHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkItemCommand>, DeleteWorkItemHandler>();
+        services.AddScoped<ICommandHandler<GetProjectWorkItemsCommand>, GetProjectWorkItemsHandler>();
 
+        // * ----------------- *
+        // * Resource Handlers *
+        // * ----------------- *
+        services.AddScoped<ICommandHandler<CreateResourceCommand>,CreateResourceHandler>();
+        services.AddScoped<ICommandHandler<GetResourceCommand>, GetResourceHandler>();
+        services.AddScoped<ICommandHandler<GetAllResourcesCommand>, GetAllResourcesHandler>();
+        services.AddScoped<ICommandHandler<UpdateResourceCommand>,UpdateResourceHandler>();
+        services.AddScoped<ICommandHandler<DeleteResourceCommand>, DeleteResourceHandler>();
+
+        // * ------------------------- *
+        // * Project Activity Handlers *
+        // * ------------------------- *
+        services.AddScoped<ICommandHandler<CreateProjectActivityCommand>,CreateProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<GetProjectActivityCommand>, GetProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<GetAllProjectActivitiesCommand>, GetAllProjectActivitiesHandler>();
+        services.AddScoped<ICommandHandler<UpdateProjectActivityCommand>,UpdateProjectActivityHandler>();
+        services.AddScoped<ICommandHandler<DeleteProjectActivityCommand>, DeleteProjectActivityHandler>();
     }
 
 

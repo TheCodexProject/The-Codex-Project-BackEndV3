@@ -1,15 +1,18 @@
 ﻿using api.endpoints.common;
-using api.endpoints.organization.models;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.workspace;
 using application.appEntry.interfaces;
 using domain.models.project;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workspace;
 
+[ApiExplorerSettings(GroupName = "Workspaces")]
 public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("/workspaces/{id}")]
+    [HttpPut("workspaces/{id}")]
+    [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> UpdateWorkspace([FromRoute] string id, [FromBody] UpdateWorkspaceRequest request)
     {
         // * Create the request
@@ -28,16 +31,16 @@ public class UpdateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBa
             : Ok(Transform(cmd));
     }
 
-    private DTOs.WorkspaceDTO Transform(UpdateWorkspaceCommand cmd)
+    private WorkspaceDTO Transform(UpdateWorkspaceCommand cmd)
     {
         // * Extract the workspace from the command
         var workspace = cmd.Workspace;
 
         // * Extract the contacts from the workspace
-        var contacts = workspace.Contacts.Select(contact => new DTOs.UserDTO(contact.Id.ToString(), $"{contact.FirstName} {contact.LastName}", contact.Email)).ToList();
+        var contacts = workspace.Contacts.Select(contact => new UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email, [], [])).ToList();
 
         // * Create the DTO
-        return new DTOs.WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
+        return new WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
     }
 }
 

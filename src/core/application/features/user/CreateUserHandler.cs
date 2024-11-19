@@ -27,7 +27,7 @@ public class CreateUserHandler(IUnitOfWork unitOfWork) : ICommandHandler<CreateU
             return Result.Failure(new FailedOperationException("Failed to save the user to the database."));
 
         // * Set the user's ID to the command
-        command.Id = user.Value.Id;
+        command.User = user.Value;
 
         // * Return the success result
         return Result.Success();

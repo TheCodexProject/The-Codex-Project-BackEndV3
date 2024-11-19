@@ -1,4 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using domain.interfaces;
+using domain.models.projectActivity;
+using domain.models.projectActivity.value;
+using domain.models.resource;
+using domain.models.resource.values;
 using domain.models.workItem;
 using domain.models.workspace;
 using domain.shared;
@@ -6,7 +12,7 @@ using OperationResult;
 
 namespace domain.models.project;
 
-public class Project
+public class Project : IResourceOwner
 {
     // # METADATA #
     [Key]
@@ -55,7 +61,15 @@ public class Project
 
     public List<WorkItem> Tasks { get; private set; } = new List<WorkItem>();
 
-    // TODO: Resources, Tasks etc.
+    public List<Resource> Resources { get; private set; } = new List<Resource>();
+
+    public List<ProjectActivity> ProjectActivities { get; set; } = new List<ProjectActivity>();
+
+    [NotMapped]
+    public List<ProjectActivity> Milestones => ProjectActivities.FindAll(activity => activity.Type == ProjectActivityType.Milestone);
+
+    [NotMapped]
+    public List<ProjectActivity> Iterations => ProjectActivities.FindAll(activity => activity.Type == ProjectActivityType.Iteration);
 
     // # CONSTRUCTORS #
 
@@ -66,7 +80,7 @@ public class Project
     {
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
-        CreatedBy = workspace.Owner.Owner.Email;
+        CreatedBy = "TO DO: Implement User";
 
         Workspace = workspace;
         workspace.AddProject(this);
@@ -190,5 +204,55 @@ public class Project
         return Result.Success();
     }
 
-    // TODO: Resources, Tasks etc.
+    public Result AddResource(Resource resource)
+    {
+        // * Add the resource to the project.
+        var addValidationResult = ProjectPropertyValidator.ValidateAddResource(resource, Resources);
+        
+        // ? Is the validation a failure?
+        if (addValidationResult.IsFailure)
+            return Result.Failure(addValidationResult.Errors.ToArray());
+        
+        Resources.Add(resource);
+        return Result.Success();
+    }
+
+    public Result RemoveResource(Resource resource)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateRemoveResource(resource, Resources);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        Resources.Remove(resource);
+        return Result.Success();
+    }
+
+    public Result AddActivity(ProjectActivity activity)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateAddActivity(activity, ProjectActivities);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        ProjectActivities.Add(activity);
+        return Result.Success();
+    }
+
+    public Result RemoveActivity(ProjectActivity activity)
+    {
+        // ? Validate the input.
+        var result = ProjectPropertyValidator.ValidateRemoveActivity(activity, ProjectActivities);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
+        ProjectActivities.Remove(activity);
+        return Result.Success();
+    }
 }

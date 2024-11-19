@@ -2,12 +2,15 @@
 using application.appEntry.commands.user;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.user;
 
+[ApiExplorerSettings(GroupName = "Users")]
 public class DeleteUserEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
     [HttpDelete("users/{id}")]
+    [SwaggerOperation(Tags = new[] { "User" })]
     public async Task<IActionResult> DeleteUser([FromRoute] string id)
     {
         // * Create the request

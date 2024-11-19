@@ -1,14 +1,18 @@
 ﻿using api.endpoints.common;
+using api.endpoints.common.DTOs;
 using application.appEntry.commands.workspace;
 using application.appEntry.interfaces;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace api.endpoints.workspace;
 
+[ApiExplorerSettings(GroupName = "Workspaces")]
 public class CreateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPost("/workspaces")]
+    [HttpPost("workspaces")]
+    [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> CreateWorkspace([FromBody] CreateWorkspaceRequest request)
     {
         // * Create the request
@@ -24,7 +28,19 @@ public class CreateWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBa
         // ? Did the execution fail?
         return result.IsFailure
             ? BadRequest(result.Errors)
-            : Ok(new CreateWorkspaceResponse(cmd.Value.Id.ToString()));
+            : Ok(Transform(cmd));
+    }
+
+    private WorkspaceDTO Transform(CreateWorkspaceCommand cmd)
+    {
+        // * Extract the workspace from the command
+        var workspace = cmd.Workspace;
+
+        // * Extract the contacts from the workspace
+        var contacts = workspace.Contacts.Select(contact => new UserDTO(contact.Id.ToString(), contact.FirstName, contact.LastName, contact.Email, [], [])).ToList();
+
+        // * Create the DTO
+        return new WorkspaceDTO(workspace.Id.ToString(), workspace.Title, workspace.Owner.Name, contacts, workspace.Projects.Select(project => project.Id.ToString()).ToList());
     }
 }
 
