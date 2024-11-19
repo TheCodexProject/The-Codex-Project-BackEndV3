@@ -4,6 +4,7 @@ using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
+using unitTests.utils;
 
 namespace unitTests.models.workspace;
 
@@ -11,8 +12,7 @@ public class WorkspaceModelTests
 {
     // SECTION #1: Creation of Workspace
 
-    private static readonly User Owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
-    private readonly Organization _organization = Organization.Create("My Organization", Owner).Value;
+    private readonly Organization _organization = MockDataProvider.GetOrganization();
 
     // # 1: An workspace should be created with a valid title and an organization.
     [Test]
@@ -157,7 +157,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var contact = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var contact = MockDataProvider.GetUser();
 
         // Act
         var result = workspace.AddContact(contact);
@@ -177,7 +177,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var contact = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var contact = MockDataProvider.GetUser();
 
         // Act
         workspace.AddContact(contact);
@@ -211,7 +211,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var contact = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var contact = MockDataProvider.GetUser();
 
         // Act
         workspace.AddContact(contact);
@@ -232,7 +232,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var contact = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var contact = MockDataProvider.GetUser();
 
         // Act
         var result = workspace.RemoveContact(contact);
@@ -265,8 +265,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var otherWorkspace = Workspace.Create(_organization, "Other Workspace").Value;
-        var project = Project.Create(otherWorkspace, "Project").Value;
+        var project = MockDataProvider.GetProjects(1, true)[0];
 
         // Act
         var result = workspace.AddProject(project);
@@ -286,7 +285,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var project = Project.Create(workspace, "Project").Value;
+        var project = MockDataProvider.GetProjects(1)[0];
 
         // Act
         workspace.AddProject(project);
@@ -320,7 +319,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var project = Project.Create(workspace, "Project").Value;
+        var project = MockDataProvider.GetProjects(1)[0];
 
         // Act
         workspace.AddProject(project);
@@ -341,8 +340,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var otherWorkspace = Workspace.Create(_organization, "Other Workspace").Value;
-        var project = Project.Create(otherWorkspace, "Project").Value;
+        var project = MockDataProvider.GetProjects(1, true)[0];
 
         // Act
         var result = workspace.RemoveProject(project);
@@ -379,7 +377,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var resource = Resource.Create("Documentation v1", "https://www.documentation.com/v1",workspace.Id,ResourceLevel.Workspace).Value;
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         var result = workspace.AddResource(resource);
@@ -399,7 +397,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var resource = Resource.Create("Documentation v1", "https://www.documentation.com/v1",workspace.Id,ResourceLevel.Workspace).Value;
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         workspace.AddResource(resource);
@@ -433,7 +431,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var resource = Resource.Create("Documentation v1", "https://www.documentation.com/v1",workspace.Id,ResourceLevel.Workspace).Value;
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         workspace.AddResource(resource);
@@ -454,7 +452,7 @@ public class WorkspaceModelTests
         // Arrange
         const string title = "My Workspace";
         var workspace = Workspace.Create(_organization, title).Value;
-        var resource = Resource.Create("Documentation v1", "https://www.documentation.com/v1",workspace.Id,ResourceLevel.Workspace).Value;
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         var result = workspace.RemoveResource(resource);

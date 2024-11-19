@@ -4,6 +4,7 @@ using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
+using unitTests.utils;
 
 namespace unitTests.models.workspace;
 
@@ -72,24 +73,16 @@ public class WorkspacePropertyValidatorTests
 
 
     // SECTION #2: Validate Add Contact
-    private static List<User> GetContacts()
-    {
-        return
-        [
-            User.Create("John", "Doe", "johndoe@mail.com").Value,
-            User.Create("Jane", "Doe", "janedoe@mail.com").Value
-        ];
-    }
-
     // # 1: Contact cannot be null.
     [Test]
     public void Contact_Should_Not_Be_Null()
     {
         // Arrange
         User? contact = null;
+        var contacts = MockDataProvider.GetUsers(3);
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateAddContact(contact, GetContacts());
+        var result = WorkspacePropertyValidator.ValidateAddContact(contact, contacts);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -101,7 +94,7 @@ public class WorkspacePropertyValidatorTests
     public void Contact_Should_Already_Exist_In_List()
     {
         // Arrange
-        var contacts = GetContacts();
+        var contacts = MockDataProvider.GetUsers(3);
         var contact = contacts[0];
 
         // Act
@@ -117,7 +110,7 @@ public class WorkspacePropertyValidatorTests
     public void Contact_Should_Not_Already_Exist_In_List()
     {
         // Arrange
-        var contacts = GetContacts();
+        var contacts = MockDataProvider.GetUsers(3);
         var contact = User.Create("John", "Smith", "johnsmith@mail.com").Value;
 
         // Act
@@ -136,9 +129,10 @@ public class WorkspacePropertyValidatorTests
     {
         // Arrange
         User? contact = null;
+        var contacts = MockDataProvider.GetUsers(3);
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateRemoveContact(contact, GetContacts());
+        var result = WorkspacePropertyValidator.ValidateRemoveContact(contact, contacts);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -150,7 +144,7 @@ public class WorkspacePropertyValidatorTests
     public void Contact_Should_Not_Exist_In_List_For_Removal()
     {
         // Arrange
-        var contacts = GetContacts();
+        var contacts = MockDataProvider.GetUsers(3);
         var contact = User.Create("John", "Smith", "johnsmith@mail.com").Value;
 
         // Act
@@ -166,7 +160,7 @@ public class WorkspacePropertyValidatorTests
     public void Contact_Should_Exist_In_List_For_Removal()
     {
         // Arrange
-        var contacts = GetContacts();
+        var contacts = MockDataProvider.GetUsers(3);
         var contact = contacts[0];
 
         // Act
@@ -179,28 +173,16 @@ public class WorkspacePropertyValidatorTests
 
     // SECTION #4: Validate Add Project
 
-    private static List<Project> GetProjects()
-    {
-        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
-        var organization = Organization.Create("Organization 1",  owner).Value;
-        var workspace = Workspace.Create(organization, "Workspace 1").Value;
-
-        return
-        [
-            Project.Create(workspace, "Project 1").Value,
-            Project.Create(workspace, "Project 2").Value
-        ];
-    }
-
     // # 1: Project cannot be null.
     [Test]
     public void Project_Should_Not_Be_Null()
     {
         // Arrange
+        var projects = MockDataProvider.GetProjects(3);
         Project? project = null;
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateAddProject(project, GetProjects());
+        var result = WorkspacePropertyValidator.ValidateAddProject(project, projects);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -212,7 +194,7 @@ public class WorkspacePropertyValidatorTests
     public void Project_Should_Already_Exist_In_List()
     {
         // Arrange
-        var projects = GetProjects();
+        var projects = MockDataProvider.GetProjects(3);
         var project = projects[0];
 
         // Act
@@ -228,7 +210,7 @@ public class WorkspacePropertyValidatorTests
     public void Project_Should_Not_Already_Exist_In_List()
     {
         // Arrange
-        var projects = GetProjects();
+        var projects = MockDataProvider.GetProjects(3);
         var project = Project.Create(projects[0].Workspace, "Project 3").Value;
 
         // Act
@@ -246,10 +228,11 @@ public class WorkspacePropertyValidatorTests
     public void Project_Should_Not_Be_Null_For_Removal()
     {
         // Arrange
+        var projects = MockDataProvider.GetProjects(3);
         Project? project = null;
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateRemoveProject(project, GetProjects());
+        var result = WorkspacePropertyValidator.ValidateRemoveProject(project, projects);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -261,7 +244,7 @@ public class WorkspacePropertyValidatorTests
     public void Project_Should_Not_Exist_In_List_For_Removal()
     {
         // Arrange
-        var projects = GetProjects();
+        var projects = MockDataProvider.GetProjects(3);
         var project = Project.Create(projects[0].Workspace, "Project 3").Value;
 
         // Act
@@ -277,7 +260,7 @@ public class WorkspacePropertyValidatorTests
     public void Project_Should_Exist_In_List_For_Removal()
     {
         // Arrange
-        var projects = GetProjects();
+        var projects = MockDataProvider.GetProjects(3);
         var project = projects[0];
 
         // Act
@@ -290,24 +273,16 @@ public class WorkspacePropertyValidatorTests
 
     // SECTION #6: Validate Add Resource
 
-    private static List<Resource> GetResources()
-    {
-        return
-        [
-            Resource.Create("Alpha","https://www.alpha.com",Guid.Empty, ResourceLevel.Organization).Value,
-            Resource.Create("Beta","https://www.beta.com",Guid.Empty, ResourceLevel.Organization).Value
-        ];
-    }
-
     // # 1: Resource cannot be null.
     [Test]
     public void Resource_Should_Not_Be_Null()
     {
         // Arrange
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
         Resource? resource = null;
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateAddResource(resource, GetResources());
+        var result = WorkspacePropertyValidator.ValidateAddResource(resource, resources);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -319,7 +294,7 @@ public class WorkspacePropertyValidatorTests
     public void Resource_Should_Already_Exist_In_List()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
         var resource = resources[0];
 
         // Act
@@ -335,8 +310,8 @@ public class WorkspacePropertyValidatorTests
     public void Resource_Should_Not_Already_Exist_In_List()
     {
         // Arrange
-        var resources = GetResources();
-        var resource = Resource.Create("Gamma","https://www.gamma.com",Guid.Empty, ResourceLevel.Organization).Value;
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         var result = WorkspacePropertyValidator.ValidateAddResource(resource, resources);
@@ -353,10 +328,11 @@ public class WorkspacePropertyValidatorTests
     public void Resource_Should_Not_Be_Null_For_Removal()
     {
         // Arrange
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
         Resource? resource = null;
 
         // Act
-        var result = WorkspacePropertyValidator.ValidateRemoveResource(resource, GetResources());
+        var result = WorkspacePropertyValidator.ValidateRemoveResource(resource, resources);
 
         // Assert
         Assert.That(result.IsFailure, Is.True);
@@ -368,8 +344,8 @@ public class WorkspacePropertyValidatorTests
     public void Resource_Should_Not_Exist_In_List_For_Removal()
     {
         // Arrange
-        var resources = GetResources();
-        var resource = Resource.Create("Gamma","https://www.gamma.com",Guid.Empty, ResourceLevel.Organization).Value;
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Workspace)[0];
 
         // Act
         var result = WorkspacePropertyValidator.ValidateRemoveResource(resource, resources);
@@ -384,7 +360,7 @@ public class WorkspacePropertyValidatorTests
     public void Resource_Should_Exist_In_List_For_Removal()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(3, ResourceLevel.Workspace);
         var resource = resources[0];
 
         // Act
