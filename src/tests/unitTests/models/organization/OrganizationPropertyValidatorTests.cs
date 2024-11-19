@@ -3,6 +3,7 @@ using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
+using unitTests.utils;
 
 namespace unitTests.models.organization;
 
@@ -85,21 +86,12 @@ public class OrganizationPropertyValidatorTests
 
     // SECTION: Add Member
 
-    private static List<User> GetMembers()
-    {
-        return
-        [
-            User.Create("John", "Doe", "johndoe@mail.com").Value,
-            User.Create("Jane", "Doe", "janedoe@mail.com").Value
-        ];
-    }
-
     // # 1: Member is null.
     [Test]
     public void ValidateAddMember_NullMember_ShouldBeInvalid()
     {
         // Arrange
-        var members = GetMembers();
+        var members = MockDataProvider.GetUsers(3);
         User? member = null;
 
         // Act
@@ -118,7 +110,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddMember_MemberAlreadyExists_ShouldBeInvalid()
     {
         // Arrange
-        var members = GetMembers();
+        var members = MockDataProvider.GetUsers(3);
         var member = members[0];
 
         // Act
@@ -137,8 +129,8 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddMember_AllowsAdditionOfNewMember()
     {
         // Arrange
-        var members = GetMembers();
-        var member = User.Create("John", "Smith", "johnsmith@mail.com");
+        var members = MockDataProvider.GetUsers(3);
+        var member = MockDataProvider.GetUser();
 
         // Act
         var result = OrganizationPropertyValidator.ValidateAddMember(member, members);
@@ -154,7 +146,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveMember_NullMember_ShouldBeInvalid()
     {
         // Arrange
-        var members = GetMembers();
+        var members = MockDataProvider.GetUsers(3);
         User? member = null;
 
         // Act
@@ -173,8 +165,8 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveMember_MemberDoesNotExist_ShouldBeInvalid()
     {
         // Arrange
-        var members = GetMembers();
-        var member = User.Create("John", "Smith", "johnsmith@mail.com").Value;
+        var members = MockDataProvider.GetUsers(3);
+        var member = MockDataProvider.GetUser();
 
         // Act
         var result = OrganizationPropertyValidator.ValidateRemoveMember(member, members);
@@ -192,11 +184,17 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveMember_AllowsDeletionOfExistingMember_Success()
     {
         // Arrange
-        var members = GetMembers();
+        var members = MockDataProvider.GetUsers(3);
         var member = members[0];
 
         // Act
         var result = OrganizationPropertyValidator.ValidateRemoveMember(member, members);
+
+        // ! Print failure message.
+        if (result.IsFailure)
+        {
+            Console.WriteLine(result.Errors.First().Message);
+        }
 
         // Assert
         Assert.That(result.IsSuccess, Is.True);
@@ -204,24 +202,12 @@ public class OrganizationPropertyValidatorTests
 
     // SECTION: Add Workspace
 
-    private static List<Workspace> GetWorkspaces()
-    {
-        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
-        var org = Organization.Create("Alpha",owner).Value;
-
-        return
-        [
-            Workspace.Create(org,"Alpha").Value,
-            Workspace.Create(org,"Beta").Value
-        ];
-    }
-
     // # 1: Workspace is null.
     [Test]
     public void ValidateAddWorkspace_NullWorkspace_ShouldBeInvalid ()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
+        var workspaces = MockDataProvider.GetWorkspaces(2);
         Workspace? workspace = null;
 
         // Act
@@ -240,7 +226,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddWorkspace_WorkspaceAlreadyExists_ShouldBeInvalid()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
+        var workspaces = MockDataProvider.GetWorkspaces(2);
         var workspace = workspaces[0];
 
         // Act
@@ -259,7 +245,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddWorkspace_AllowsAdditionOfNewWorkspace()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
+        var workspaces = MockDataProvider.GetWorkspaces(2);
         var workspace = Workspace.Create(workspaces[0].Owner,"Gamma").Value;
 
         // Act
@@ -276,7 +262,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveWorkspace_NullWorkspace_ShouldBeInvalid()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
+        var workspaces = MockDataProvider.GetWorkspaces(2);
         Workspace? workspace = null;
 
         // Act
@@ -295,8 +281,8 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveWorkspace_WorkspaceDoesNotExist_ShouldBeInvalid()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
-        var workspace = Workspace.Create(workspaces[0].Owner,"Gamma").Value;
+        var workspaces = MockDataProvider.GetWorkspaces(2);
+        var workspace = MockDataProvider.GetWorkspace();
 
         // Act
         var result = OrganizationPropertyValidator.ValidateRemoveWorkspace(workspace, workspaces);
@@ -314,7 +300,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveWorkspace_AllowsDeletionOfExistingWorkspace_Success()
     {
         // Arrange
-        var workspaces = GetWorkspaces();
+        var workspaces = MockDataProvider.GetWorkspaces(2);
         var workspace = workspaces[0];
 
         // Act
@@ -325,21 +311,14 @@ public class OrganizationPropertyValidatorTests
     }
 
     // SECTION: Add Resource
-    private static List<Resource> GetResources()
-    {
-        return
-        [
-            Resource.Create("Alpha","https://www.alpha.com",Guid.Empty, ResourceLevel.Organization).Value,
-            Resource.Create("Beta","https://www.beta.com",Guid.Empty, ResourceLevel.Organization).Value
-        ];
-    }
+
 
     // # 1: Resource is null.
     [Test]
     public void ValidateAddResource_NullResource_ShouldBeInvalid()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
         Resource? resource = null;
 
         // Act
@@ -358,7 +337,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddResource_ResourceAlreadyExists_ShouldBeInvalid()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
         var resource = resources[0];
 
         // Act
@@ -377,8 +356,8 @@ public class OrganizationPropertyValidatorTests
     public void ValidateAddResource_AllowsAdditionOfNewResource()
     {
         // Arrange
-        var resources = GetResources();
-        var resource = Resource.Create("Gamma","https://www.gamma.com",Guid.Empty, ResourceLevel.Organization);
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         var result = OrganizationPropertyValidator.ValidateAddResource(resource, resources);
@@ -394,7 +373,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveResource_NullResource_ShouldBeInvalid()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
         Resource? resource = null;
 
         // Act
@@ -413,8 +392,8 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveResource_ResourceDoesNotExist_ShouldBeInvalid()
     {
         // Arrange
-        var resources = GetResources();
-        var resource = Resource.Create("Gamma","https://www.gamma.com",Guid.Empty, ResourceLevel.None).Value;
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         var result = OrganizationPropertyValidator.ValidateRemoveResource(resource, resources);
@@ -432,7 +411,7 @@ public class OrganizationPropertyValidatorTests
     public void ValidateRemoveResource_AllowsDeletionOfExistingResource_Success()
     {
         // Arrange
-        var resources = GetResources();
+        var resources = MockDataProvider.GetResources(2, ResourceLevel.Organization);
         var resource = resources[0];
 
         // Act

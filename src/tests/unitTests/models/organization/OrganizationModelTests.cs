@@ -3,6 +3,7 @@ using domain.models.resource;
 using domain.models.resource.values;
 using domain.models.user;
 using domain.models.workspace;
+using unitTests.utils;
 
 namespace unitTests.models.organization;
 
@@ -11,7 +12,7 @@ public class OrganizationModelTests
 {
     // SECTION #1: Creation of Organization
 
-    private readonly User _owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
+    private readonly User _owner = MockDataProvider.GetUser();
 
     // # 1: An organization should be created with a valid name and owner.
     [Test]
@@ -141,8 +142,8 @@ public class OrganizationModelTests
     public void Organization_AddMember_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var member = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var member = MockDataProvider.GetUser();
 
         // Act
         var result = organization.AddMember(member);
@@ -160,8 +161,8 @@ public class OrganizationModelTests
     public void Organization_AddMemberThatAlreadyExists_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var member = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var member = MockDataProvider.GetUser();
 
         // Act
         organization.AddMember(member);
@@ -176,7 +177,7 @@ public class OrganizationModelTests
     public void Organization_AddNullMember_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.AddMember(null!);
@@ -192,8 +193,8 @@ public class OrganizationModelTests
     public void Organization_RemoveMember_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var member = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var member = MockDataProvider.GetUser();
 
         // Act
         organization.AddMember(member);
@@ -212,8 +213,8 @@ public class OrganizationModelTests
     public void Organization_RemoveMemberThatDoesNotExist_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var member = User.Create("Jane", "Doe", "janedoe@mail.com").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var member = MockDataProvider.GetUser();
 
         // Act
         var result = organization.RemoveMember(member);
@@ -227,7 +228,7 @@ public class OrganizationModelTests
     public void Organization_RemoveNullMember_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.RemoveMember(null!);
@@ -243,9 +244,8 @@ public class OrganizationModelTests
     public void Organization_AddWorkspace_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var otherOrganization = Organization.Create("Beta", _owner).Value;
-        var workspace = Workspace.Create(otherOrganization,"Alpha Workspace").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var workspace = MockDataProvider.GetWorkspaces(1, true)[0];
 
         // Act
         var result = organization.AddWorkspace(workspace);
@@ -268,8 +268,8 @@ public class OrganizationModelTests
     public void Organization_AddWorkspaceThatAlreadyExists_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var workspace = Workspace.Create(organization,"Alpha Workspace").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var workspace = MockDataProvider.GetWorkspaces(1)[0];
 
         // Act
         organization.AddWorkspace(workspace);
@@ -284,7 +284,7 @@ public class OrganizationModelTests
     public void Organization_AddNullWorkspace_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.AddWorkspace(null!);
@@ -300,8 +300,8 @@ public class OrganizationModelTests
     public void Organization_RemoveWorkspace_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var workspace = Workspace.Create(organization,"Alpha Workspace").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var workspace = MockDataProvider.GetWorkspaces(1)[0];
 
         // Act
         organization.AddWorkspace(workspace);
@@ -316,9 +316,8 @@ public class OrganizationModelTests
     public void Organization_RemoveWorkspaceThatDoesNotExist_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var otherOrganization = Organization.Create("Beta", _owner).Value;
-        var workspace = Workspace.Create(otherOrganization,"Alpha Workspace").Value;
+        var organization = MockDataProvider.GetOrganization();
+        var workspace = MockDataProvider.GetWorkspaces(1,true)[0];
 
         // Act
         var result = organization.RemoveWorkspace(workspace);
@@ -332,7 +331,7 @@ public class OrganizationModelTests
     public void Organization_RemoveNullWorkspace_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.RemoveWorkspace(null!);
@@ -348,8 +347,8 @@ public class OrganizationModelTests
     public void Organization_AddResource_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var resource = Resource.Create("Alpha","https://www.alpha.com/v1",organization.Id,ResourceLevel.Organization).Value;
+        var organization = MockDataProvider.GetOrganization();
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         var result = organization.AddResource(resource);
@@ -363,8 +362,8 @@ public class OrganizationModelTests
     public void Organization_AddResourceThatAlreadyExists_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var resource = Resource.Create("Alpha","https://www.alpha.com/v1",organization.Id,ResourceLevel.Organization).Value;
+        var organization = MockDataProvider.GetOrganization();
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         organization.AddResource(resource);
@@ -379,7 +378,7 @@ public class OrganizationModelTests
     public void Organization_AddNullResource_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.AddResource(null!);
@@ -395,8 +394,8 @@ public class OrganizationModelTests
     public void Organization_RemoveResource_ShouldSucceed()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var resource = Resource.Create("Alpha","https://www.alpha.com/v1",organization.Id,ResourceLevel.Organization).Value;
+        var organization = MockDataProvider.GetOrganization();
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         organization.AddResource(resource);
@@ -411,8 +410,8 @@ public class OrganizationModelTests
     public void Organization_RemoveResourceThatDoesNotExist_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
-        var resource = Resource.Create("Alpha","https://www.alpha.com/v1",organization.Id,ResourceLevel.Organization).Value;
+        var organization = MockDataProvider.GetOrganization();
+        var resource = MockDataProvider.GetResources(1, ResourceLevel.Organization)[0];
 
         // Act
         var result = organization.RemoveResource(resource);
@@ -426,7 +425,7 @@ public class OrganizationModelTests
     public void Organization_RemoveNullResource_ShouldFail()
     {
         // Arrange
-        var organization = Organization.Create("Alpha", _owner).Value;
+        var organization = MockDataProvider.GetOrganization();
 
         // Act
         var result = organization.RemoveResource(null!);
