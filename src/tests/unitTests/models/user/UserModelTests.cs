@@ -1,5 +1,6 @@
 using domain.models.organization;
 using domain.models.user;
+using unitTests.utils;
 
 namespace unitTests.models.user;
 
@@ -138,16 +139,16 @@ public class UserModelTests
         // Arrange
         const string firstName = "Bob";
 
-        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateFirstName(firstName);
+        var result = user.UpdateFirstName(firstName);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(user.Value.FirstName, Is.EqualTo(firstName));
+            Assert.That(user.FirstName, Is.EqualTo(firstName));
         });
     }
 
@@ -158,16 +159,16 @@ public class UserModelTests
         // Arrange
         const string firstName = "Bob1";
 
-        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateFirstName(firstName);
+        var result = user.UpdateFirstName(firstName);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsFailure, Is.True);
-            Assert.That(user.Value.FirstName, Is.Not.EqualTo(firstName));
+            Assert.That(user.FirstName, Is.Not.EqualTo(firstName));
         });
     }
 
@@ -180,16 +181,16 @@ public class UserModelTests
         // Arrange
         const string lastName = "Smith";
 
-        var user = User.Create("John", "Doe", "johnsmith@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateLastName(lastName);
+        var result = user.UpdateLastName(lastName);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(user.Value.LastName, Is.EqualTo(lastName));
+            Assert.That(user.LastName, Is.EqualTo(lastName));
         });
     }
 
@@ -200,16 +201,16 @@ public class UserModelTests
         // Arrange
         const string lastName = "Smith1";
 
-        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateLastName(lastName);
+        var result = user.UpdateLastName(lastName);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsFailure, Is.True);
-            Assert.That(user.Value.LastName, Is.Not.EqualTo(lastName));
+            Assert.That(user.LastName, Is.Not.EqualTo(lastName));
         });
     }
 
@@ -222,16 +223,16 @@ public class UserModelTests
         // Arrange
         const string email = "johnsmith@mail.com";
 
-        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateEmail(email);
+        var result = user.UpdateEmail(email);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsSuccess, Is.True);
-            Assert.That(user.Value.Email, Is.EqualTo(email));
+            Assert.That(user.Email, Is.EqualTo(email));
         });
     }
 
@@ -242,32 +243,20 @@ public class UserModelTests
         // Arrange
         const string email = "johnsmithmail.com";
 
-        var user = User.Create("John", "Doe", "johndoe@mail.com");
+        var user = MockDataProvider.GetUser();
 
         // Act
-        var result = user.Value.UpdateEmail(email);
+        var result = user.UpdateEmail(email);
 
         Assert.Multiple(() =>
         {
             // Assert
             Assert.That(result.IsFailure, Is.True);
-            Assert.That(user.Value.Email, Is.Not.EqualTo(email));
+            Assert.That(user.Email, Is.Not.EqualTo(email));
         });
     }
 
     // SECTION #2.4: Join Organization
-    private static List<Organization> GetOrganizations()
-    {
-        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
-
-        return
-        [
-            Organization.Create("Alpha", owner).Value,
-            Organization.Create("Beta", owner).Value,
-            Organization.Create("Gamma", owner).Value
-        ];
-    }
-
 
     // # 1: A user should be able to join an organization
     [Test]
@@ -275,7 +264,7 @@ public class UserModelTests
     {
         // Arrange
         var user = User.Create("John", "Doe", "johndoe@mail.com");
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(2);
 
         // Act
         var result = user.Value.JoinOrganization(organizations[0]);
@@ -294,7 +283,7 @@ public class UserModelTests
     {
         // Arrange
         var user = User.Create("John", "Doe", "johndoe@mail.com");
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(2);
 
         // Act
         user.Value.JoinOrganization(organizations[0]);
@@ -330,7 +319,7 @@ public class UserModelTests
     {
         // Arrange
         var user = User.Create("John", "Doe", "johndoe@mail.com");
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(2);
 
         // Act
         user.Value.JoinOrganization(organizations[0]);
@@ -350,7 +339,7 @@ public class UserModelTests
     {
         // Arrange
         var user = User.Create("John", "Doe", "johndoe@mail.com");
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(2);
 
         // Act
         var result = user.Value.LeaveOrganization(organizations[0]);

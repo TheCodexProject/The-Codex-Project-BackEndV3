@@ -1,5 +1,6 @@
 using domain.models.organization;
 using domain.models.user;
+using unitTests.utils;
 
 namespace unitTests.models.user;
 
@@ -264,24 +265,12 @@ public class UserPropertyValidatorTests
 
     // SECTION #4: Add Organization
 
-    private static List<Organization> GetOrganizations()
-    {
-        var owner = User.Create("John", "Doe", "johndoe@mail.com").Value;
-
-        return
-        [
-            Organization.Create("Alpha", owner).Value,
-            Organization.Create("Beta", owner).Value,
-            Organization.Create("Gamma", owner).Value
-        ];
-    }
-
     // # 1: Organization is null.
     [Test]
     public void ValidateAddOrganization_NullOrganization_ShouldBeInvalid()
     {
         // Arrange
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(3);
 
         // Act
         var result = UserPropertyValidator.ValidateAddOrganization(null, organizations);
@@ -296,7 +285,7 @@ public class UserPropertyValidatorTests
     public void ValidateAddOrganization_OrganizationAlreadyExists_ShouldBeInvalid()
     {
         // Arrange
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(3);
         var organization = organizations[0];
 
         // Act
@@ -312,8 +301,8 @@ public class UserPropertyValidatorTests
     public void ValidateAddOrganization_AllowsAdditionOfNewOrganization()
     {
         // Arrange
-        var organizations = GetOrganizations();
-        var organization = Organization.Create("Delta", organizations[0].Owner).Value;
+        var organizations = MockDataProvider.GetOrganizations(3);
+        var organization = MockDataProvider.GetOrganizations(1)[0];
 
         // Act
         var result = UserPropertyValidator.ValidateAddOrganization(organization, organizations);
@@ -329,7 +318,7 @@ public class UserPropertyValidatorTests
     public void ValidateRemoveOrganization_NullOrganization_ShouldBeInvalid()
     {
         // Arrange
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(3);
 
         // Act
         var result = UserPropertyValidator.ValidateRemoveOrganization(null, organizations);
@@ -344,8 +333,8 @@ public class UserPropertyValidatorTests
     public void ValidateRemoveOrganization_OrganizationDoesNotExist_ShouldBeInvalid()
     {
         // Arrange
-        var organizations = GetOrganizations();
-        var organization = Organization.Create("Delta", organizations[0].Owner).Value;
+        var organizations = MockDataProvider.GetOrganizations(3);
+        var organization = MockDataProvider.GetOrganizations(1)[0];
 
         // Act
         var result = UserPropertyValidator.ValidateRemoveOrganization(organization, organizations);
@@ -360,7 +349,7 @@ public class UserPropertyValidatorTests
     public void ValidateRemoveOrganization_AllowsDeletionOfExistingOrganization_Success()
     {
         // Arrange
-        var organizations = GetOrganizations();
+        var organizations = MockDataProvider.GetOrganizations(3);
         var organization = organizations[0];
 
         // Act
