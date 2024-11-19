@@ -9,7 +9,7 @@ namespace api.endpoints.project;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class DeleteProjectEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpDelete("/projects/{id}")]
+    [HttpDelete("projects/{id}")]
     [SwaggerOperation(Tags = new[] { "Project" })]
     public async Task<IActionResult> DeleteProject([FromRoute] string id)
     {

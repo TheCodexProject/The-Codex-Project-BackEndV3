@@ -16,10 +16,6 @@ public class GetAllWorkspacesHandler(IUnitOfWork unitOfWork) : ICommandHandler<G
         // ? Were there any workspaces?
         var enumerable = workspaces.ToList();
 
-        if (enumerable.Count == 0)
-            // ! Return the error
-            return Result.Failure(new NotFoundException("No workspaces were found in the database."));
-
         // * Return the workspaces
         command.Workspaces = enumerable;
         return Result.Success();

@@ -12,7 +12,7 @@ namespace api.endpoints.project.iteration;
 [ApiExplorerSettings(GroupName = "Projects")]
 public class UpdateMilestoneEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpPut("project/{projectId}/milestones/{milestoneId}")]
+    [HttpPut("projects/{projectId}/milestones/{milestoneId}")]
     [SwaggerOperation(Tags = new[] { "Project - Milestones" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string projectId, [FromRoute] string milestoneId, [FromBody] UpdateMilestoneRequest request)
     {

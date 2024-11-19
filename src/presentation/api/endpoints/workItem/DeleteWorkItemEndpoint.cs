@@ -9,7 +9,7 @@ namespace api.endpoints.workItem;
 [ApiExplorerSettings(GroupName = "WorkItems")]
 public class DeleteWorkItemEndpoint(ICommandDispatcher commandDispatcher) : EndpointBase
 {
-    [HttpDelete("/workItems/{id}")]
+    [HttpDelete("workItems/{id}")]
     [SwaggerOperation(Tags = new[] { "WorkItem" })]
     public async Task<IActionResult> HandleAsync([FromRoute] string id)
     {

@@ -39,6 +39,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllOrganizationsCommand>, GetAllOrganizationsHandler>();
         services.AddScoped<ICommandHandler<UpdateOrganizationCommand>,UpdateOrganizationHandler>();
         services.AddScoped<ICommandHandler<DeleteOrganizationCommand>, DeleteOrganizationHandler>();
+        services.AddScoped<ICommandHandler<GetUserOrganizationsCommand>, GetUserOrganizationsHandler>();
 
         // * ------------------ *
         // * Workspace Handlers *
@@ -48,6 +49,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllWorkspacesCommand>, GetAllWorkspacesHandler>();
         services.AddScoped<ICommandHandler<UpdateWorkspaceCommand>,UpdateWorkspaceHandler>();
         services.AddScoped<ICommandHandler<DeleteWorkspaceCommand>, DeleteWorkspaceHandler>();
+        services.AddScoped<ICommandHandler<GetOrganizationWorkspacesCommand>, GetOrganizationWorkspacesHandler>();
 
         // * ---------------- *
         // * Project Handlers *
@@ -57,6 +59,7 @@ public static class ApplicationExtensions
         services.AddScoped<ICommandHandler<GetAllProjectsCommand>, GetAllProjectsHandler>();
         services.AddScoped<ICommandHandler<UpdateProjectCommand>,UpdateProjectHandler>();
         services.AddScoped<ICommandHandler<DeleteProjectCommand>, DeleteProjectHandler>();
+        services.AddScoped<ICommandHandler<GetWorkspaceProjectsCommand>, GetWorkspaceProjectsHandler>();
 
         // * ----------------- *
         // * WorkItem Handlers *

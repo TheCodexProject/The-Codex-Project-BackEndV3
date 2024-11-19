@@ -10,7 +10,7 @@ namespace api.endpoints.workspace;
 [ApiExplorerSettings(GroupName = "Workspaces")]
 public class GetWorkspaceEndpoint(ICommandDispatcher dispatcher) : EndpointBase
 {
-    [HttpGet("/workspaces/{id}")]
+    [HttpGet("workspaces/{id}")]
     [SwaggerOperation(Tags = new[] { "Workspace" })]
     public async Task<IActionResult> GetWorkspace([FromRoute] string id)
     {
