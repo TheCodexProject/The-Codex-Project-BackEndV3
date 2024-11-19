@@ -23,7 +23,11 @@
 
     <ItemGroup>
       <Folder Include="models\" />
-      <Folder Include="tools\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\core\domain\domain.csproj" />
+      <ProjectReference Include="..\..\core\tools\OperationResult\OperationResult.csproj" />
     </ItemGroup>
 
 </Project>
