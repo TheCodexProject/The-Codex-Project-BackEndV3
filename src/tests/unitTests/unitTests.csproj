@@ -30,4 +30,8 @@
       <ProjectReference Include="..\..\core\tools\OperationResult\OperationResult.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\core\domain\domain.csproj" />
+    </ItemGroup>
+
 </Project>

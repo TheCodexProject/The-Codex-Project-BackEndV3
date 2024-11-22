@@ -82,7 +82,7 @@ public static class ProjectPropertyValidator
                     "Project start date is after the end date, please provide a valid start date."));
         }
 
-        // ? Is the start date before the end date?
+        // ? Is the end date before the start date?
         if (end < start)
         {
             return Result<(DateTime start, DateTime end)>.Failure(

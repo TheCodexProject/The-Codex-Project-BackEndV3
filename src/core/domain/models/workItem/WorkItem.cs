@@ -71,7 +71,7 @@ public class WorkItem
     /// Subitems that are part of the work item.
     /// </summary>
     public List<WorkItem> Subitems { get; private set; } = new List<WorkItem>();
-    
+
     public List<Resource> Resources { get; private set; } = new List<Resource>();
 
     private List<ProjectActivity> _isAPartOf = new List<ProjectActivity>();
@@ -177,6 +177,13 @@ public class WorkItem
 
     public Result UpdateType(ItemType type)
     {
+        // ? Validate the input.
+        var result = WorkItemPropertyValidator.ValidateType(type);
+
+        // ? Is the validation a failure?
+        if (result.IsFailure)
+            return Result.Failure(result.Errors.ToArray());
+
         Type = type;
         return Result.Success();
     }
@@ -245,7 +252,7 @@ public class WorkItem
         Resources.Add(resource);
         return Result.Success();
     }
-    
+
     public Result RemoveResource(Resource resource)
     {
         // ? Validate the input.

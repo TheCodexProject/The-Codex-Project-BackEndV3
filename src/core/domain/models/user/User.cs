@@ -75,13 +75,18 @@ public class User
 
     private static Result Validate(string firstName, string lastName, string email)
     {
+        // * List of errors.
+        // This is done to collect all the errors and return them at once.
+        List<Exception> errors = [];
+
+
         // ! Validate the first name.
         var firstNameResult = UserPropertyValidator.ValidateFirstName(firstName);
 
         // ? Is the result a failure?
         if (firstNameResult.IsFailure)
         {
-            return Result.Failure(firstNameResult.Errors.ToArray());
+            errors.AddRange(firstNameResult.Errors);
         }
 
         // ! Validate the last name.
@@ -90,7 +95,7 @@ public class User
         // ? Is the result a failure?
         if (lastNameResult.IsFailure)
         {
-            return Result.Failure(lastNameResult.Errors.ToArray());
+            errors.AddRange(lastNameResult.Errors);
         }
 
         // ! Validate the email.
@@ -99,10 +104,13 @@ public class User
         // ? Is the result a failure?
         if (emailResult.IsFailure)
         {
-            return Result.Failure(emailResult.Errors.ToArray());
+            errors.AddRange(emailResult.Errors);
         }
 
-        return Result.Success();
+        // ? Were there any errors?
+        return errors.Count != 0
+            ? Result.Failure(errors.ToArray()) // ! Return the errors.
+            : Result.Success(); // * Return success.
     }
 
     // # METHODS #
